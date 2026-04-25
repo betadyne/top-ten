@@ -71,7 +71,6 @@ src/
 ### API Routes
 - Selalu validasi input dengan Zod
 - Return `json()` atau `error()` dari `@sveltejs/kit`
-- External API calls HARUS melalui server-side proxy
 - Cache search results di KV (TTL 10 menit)
 
 ### Image Handling
@@ -89,7 +88,6 @@ src/
 
 ## ANTI-PATTERNS
 
-- **JANGAN** panggil API eksternal langsung dari browser/client
 - **JANGAN** simpan image blob di database (hanya URL)
 - **JANGAN** gunakan `any` type (kecuali benar-benar unavoidable)
 - **JANGAN** styling/CSS berlebihan (plain HTML + layout CSS only)

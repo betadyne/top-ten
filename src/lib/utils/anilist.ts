@@ -24,13 +24,10 @@ const SEARCH_CHARACTER_QUERY = `
   query SearchCharacter($search: String, $page: Int, $perPage: Int) {
     Page(page: $page, perPage: $perPage) {
       pageInfo { total currentPage lastPage }
-      characters(search: $search) {
+      characters(search: $search, sort: [SEARCH_MATCH, FAVOURITES_DESC]) {
         id
         name { full native }
         image { medium large }
-        media(page: 1, perPage: 1) {
-          nodes { title { romaji } }
-        }
       }
     }
   }
@@ -121,7 +118,7 @@ export async function searchAniListCharacters(query: string): Promise<SearchResu
 	};
 
 	if (data.errors) {
-		console.error('AniList GraphQL errors:', data.errors);
+		throw new Error('AniList GraphQL error: ' + data.errors[0].message);
 	}
 
 	const characters = data.data?.Page?.characters ?? [];
@@ -135,9 +132,7 @@ export async function searchAniListCharacters(query: string): Promise<SearchResu
 			imageUrl: weservUrl(image, 400),
 			thumbnailUrl: weservUrl(image, 150),
 			originalImageUrl: image,
-			metadata: {
-				sourceName: item.media?.nodes?.[0]?.title?.romaji
-			}
+			metadata: {}
 		};
 	});
 }

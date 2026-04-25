@@ -16,13 +16,10 @@ const SEARCH_CHARACTER_QUERY = `
   query SearchCharacter($search: String, $page: Int, $perPage: Int) {
     Page(page: $page, perPage: $perPage) {
       pageInfo { total currentPage lastPage }
-      characters(search: $search) {
+      characters(search: $search, sort: [SEARCH_MATCH, FAVOURITES_DESC]) {
         id
         name { full native }
         image { medium large }
-        media(page: 1, perPage: 1) {
-          nodes { title { romaji } }
-        }
       }
     }
   }
@@ -41,18 +38,22 @@ async function searchAniListCharacters(q: string): Promise<SearchResult[]> {
 
 		if (!response.ok) return [];
 
-		const data = await response.json() as {
+const data = await response.json() as {
 			data?: {
 				Page?: {
 					characters?: Array<{
 						id: number;
 						name: { full?: string; native?: string };
 						image?: { medium?: string; large?: string };
-						media?: { nodes?: Array<{ title?: { romaji?: string } }> };
 					}>;
 				};
 			};
+			errors?: Array<{ message: string }>;
 		};
+
+		if (data.errors) {
+			throw new Error('AniList GraphQL error: ' + data.errors[0].message);
+		}
 
 		const characters = data.data?.Page?.characters ?? [];
 		return characters.map((item) => {
@@ -65,9 +66,7 @@ async function searchAniListCharacters(q: string): Promise<SearchResult[]> {
 				imageUrl: weservUrl(image, 400),
 				thumbnailUrl: weservUrl(image, 150),
 				originalImageUrl: image,
-				metadata: {
-					sourceName: item.media?.nodes?.[0]?.title?.romaji
-				}
+				metadata: {}
 			};
 		});
 	} catch (e) {
