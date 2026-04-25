@@ -462,22 +462,47 @@ img {
 
 /* List Item */
 .list-item {
-	display: grid;
-	grid-template-columns: 40px 60px 1fr auto;
-	gap: var(--space-3);
-	align-items: center;
-	padding: var(--space-3) var(--space-4);
-	border-bottom: var(--border-thin);
+  display: grid;
+  grid-template-columns: 24px 32px 60px 1fr auto;
+  gap: var(--space-3);
+  align-items: center;
+  padding: var(--space-3) var(--space-4);
+  border-bottom: var(--border-thin);
 }
 
 .list-item:last-child {
-	border-bottom: none;
+  border-bottom: none;
+}
+
+.list-item.dragging {
+  opacity: 0.5;
+  border: var(--border-medium);
+  background: var(--hover-bg);
+  color: var(--hover-fg);
+}
+
+.drag-handle {
+  cursor: grab;
+  padding: 0 var(--space-1);
+  font-size: var(--text-sm);
+  color: var(--muted);
+  user-select: none;
+  line-height: 1;
+}
+
+.drag-handle:hover {
+  color: var(--fg);
+}
+
+.drag-handle:active {
+  cursor: grabbing;
 }
 
 .list-item-rank {
-	font-size: var(--text-2xl);
-	font-weight: 700;
-	text-align: center;
+  font-size: var(--text-lg);
+  font-weight: 700;
+  text-align: center;
+  min-width: 24px;
 }
 
 .list-item img {

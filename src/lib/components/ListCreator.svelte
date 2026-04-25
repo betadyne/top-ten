@@ -5,6 +5,9 @@
 	import { SearchBar, ItemCard, ListItem } from '$lib/components';
 	import { goto } from '$app/navigation';
 	import { get } from 'svelte/store';
+	import { DragDropProvider } from '@dnd-kit/svelte';
+	import { isSortable } from '@dnd-kit/svelte/sortable';
+	import type { DragEndEvent, Droppable } from '@dnd-kit/abstract';
 
 	let { category, placeholder }: { category: Category; placeholder: string } = $props();
 
@@ -44,6 +47,28 @@
 
 	function handleRemove(id: string) {
 		listStore.removeItem(id);
+	}
+
+	function handleDragEnd(event: DragEndEvent) {
+		if (event.canceled) return;
+		const sourceId = event.operation?.source?.id;
+		const target = event.operation?.target;
+		if (!sourceId || !target) return;
+
+		const targetIndex = (target as unknown as { index: number }).index;
+		const items = get(listStore).items;
+		const sourceIndex = items.findIndex((i) => i.id === sourceId);
+		if (sourceIndex === -1 || sourceIndex === targetIndex) return;
+
+		const newItems = arrayMove(items, sourceIndex, targetIndex);
+		listStore.reorderItems(newItems);
+	}
+
+	function arrayMove<T>(arr: T[], from: number, to: number): T[] {
+		const result = [...arr];
+		const [removed] = result.splice(from, 1);
+		result.splice(to, 0, removed);
+		return result;
 	}
 
 	async function handleSave() {
@@ -120,21 +145,23 @@
 	</div>
 
 	<div class="list-creator-right">
-		<section class="selections-section">
-			<div class="section-header">Selections ({$listStore.items.length}/10)</div>
-			{#if $listStore.items.length > 0}
+	{#if $listStore.items.length > 0}
+		<DragDropProvider onDragEnd={handleDragEnd}>
+			<section class="selections-section">
+				<div class="section-header">Selections ({$listStore.items.length}/10)</div>
 				<ol class="selections-list">
-					{#each $listStore.items as item (item.id)}
-						<ListItem {item} onRemove={handleRemove} />
+					{#each $listStore.items as item, index (item.id)}
+						<ListItem {item} {index} onRemove={handleRemove} />
 					{/each}
 				</ol>
-			{:else}
-				<div class="list-preview">
-					<div class="list-preview-title">Top 10 {categoryLabels[category]}</div>
-					<p class="list-preview-empty">Your list will appear here</p>
-				</div>
-			{/if}
-		</section>
+			</section>
+		</DragDropProvider>
+	{:else}
+		<div class="list-preview">
+			<div class="list-preview-title">Top 10 {categoryLabels[category]}</div>
+			<p class="list-preview-empty">Your list will appear here</p>
+		</div>
+	{/if}
 
 		<fieldset>
 			<legend>Settings</legend>
