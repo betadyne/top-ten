@@ -157,7 +157,7 @@
 			<fieldset>
 				<legend>Results</legend>
 				<div class="search-results">
-					{#each $searchStore.results as result}
+					{#each $searchStore.results as result (result.id)}
 						<ItemCard
 							item={result}
 							onAdd={handleAdd}

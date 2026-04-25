@@ -120,15 +120,30 @@ export const GET: RequestHandler = async ({ url, platform }) => {
 	}
 	const { q } = parseResult.data;
 
-	const cached = await getCachedSearch(platform?.env as Env, 'character', q, 1);
-	if (cached) return json(cached);
+	let cached;
+	try {
+		cached = await getCachedSearch(platform?.env as Env, 'character', q, 1);
+		if (cached) return json(cached);
+	} catch (e) {
+		console.error('Cache read error:', e);
+	}
 
-	const [anilistResults, vndbResults] = await Promise.all([
-		searchAniListCharacters(q),
-		searchVNDBCharacters(q)
-	]);
+	let results: SearchResult[];
+	try {
+		const [anilistResults, vndbResults] = await Promise.all([
+			searchAniListCharacters(q),
+			searchVNDBCharacters(q)
+		]);
+		results = [...anilistResults, ...vndbResults];
+	} catch (e) {
+		console.error('[Service] fetch error:', e);
+		error(502, { message: 'Failed to fetch character data' });
+	}
 
-	const results = [...anilistResults, ...vndbResults];
-	await setCachedSearch(platform?.env as Env, 'character', q, results, 1);
+	try {
+		await setCachedSearch(platform?.env as Env, 'character', q, results, 1);
+	} catch (e) {
+		console.error('Cache write error:', e);
+	}
 	return json(results);
 };

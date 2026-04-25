@@ -17,6 +17,7 @@ CREATE TABLE IF NOT EXISTS list_items (
     title TEXT NOT NULL,
     alt_title TEXT,
     image_url TEXT,
+    original_image_url TEXT,
     metadata TEXT,
     FOREIGN KEY (list_id) REFERENCES lists(id)
 );

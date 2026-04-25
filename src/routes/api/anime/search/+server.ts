@@ -35,59 +35,78 @@ export const GET: RequestHandler = async ({ url, platform }) => {
 	}
 	const { q } = parseResult.data;
 
-	const cached = await getCachedSearch(platform?.env as Env, 'anime', q, 1);
-	if (cached) return json(cached);
-
-	const response = await fetch(ANILIST_ENDPOINT, {
-		method: 'POST',
-		headers: { 'Content-Type': 'application/json' },
-		body: JSON.stringify({
-			query: SEARCH_ANIME_QUERY,
-			variables: { search: q, page: 1, perPage: 24 }
-		})
-	});
-
-	if (!response.ok) {
-		error(502, { message: 'AniList API error' });
+	try {
+		const cached = await getCachedSearch(platform?.env as Env, 'anime', q, 1);
+		if (cached) return json(cached);
+	} catch (e) {
+		console.error('Cache read error:', e);
 	}
 
-	const data = await response.json() as {
-		data?: {
-			Page?: {
-				media?: Array<{
-					id: number;
-					title: { romaji?: string; english?: string; native?: string };
-					coverImage?: { medium?: string; large?: string };
-					season?: string;
-					seasonYear?: number;
-					format?: string;
-					episodes?: number;
-				}>;
+	try {
+		const response = await fetch(ANILIST_ENDPOINT, {
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify({
+				query: SEARCH_ANIME_QUERY,
+				variables: { search: q, page: 1, perPage: 24 }
+			})
+		});
+
+		if (!response.ok) {
+			console.error('AniList API error:', response.status, response.statusText);
+			error(502, { message: `AniList API error: ${response.status} ${response.statusText}` });
+		}
+
+		const data = await response.json() as {
+			data?: {
+				Page?: {
+					media?: Array<{
+						id: number;
+						title: { romaji?: string; english?: string; native?: string };
+						coverImage?: { medium?: string; large?: string };
+						season?: string;
+						seasonYear?: number;
+						format?: string;
+						episodes?: number;
+					}>;
+				};
 			};
+			errors?: Array<{ message: string }>;
 		};
-	};
 
-	const media = data.data?.Page?.media ?? [];
+		if (data.errors) {
+			console.error('AniList GraphQL errors:', data.errors);
+		}
 
-	const results: SearchResult[] = media.map((item) => {
-		const image = item.coverImage?.large ?? item.coverImage?.medium ?? '';
-		return {
-			id: `anilist_${item.id}`,
-			source: 'anilist',
-			title: item.title.english ?? item.title.romaji ?? item.title.native ?? String(item.id),
-			altTitle: item.title.native ?? item.title.romaji ?? undefined,
-			imageUrl: weservUrl(image, 400),
-			thumbnailUrl: weservUrl(image, 150),
-			originalImageUrl: image,
-			metadata: {
-				episodes: item.episodes,
-				season: item.season,
-				year: item.seasonYear,
-				format: item.format
-			}
-		};
-	});
+		const media = data.data?.Page?.media ?? [];
 
-	await setCachedSearch(platform?.env as Env, 'anime', q, results, 1);
-	return json(results);
+		const results: SearchResult[] = media.map((item) => {
+			const image = item.coverImage?.large ?? item.coverImage?.medium ?? '';
+			return {
+				id: `anilist_${item.id}`,
+				source: 'anilist',
+				title: item.title.english ?? item.title.romaji ?? item.title.native ?? String(item.id),
+				altTitle: item.title.native ?? item.title.romaji ?? undefined,
+				imageUrl: weservUrl(image, 400),
+				thumbnailUrl: weservUrl(image, 150),
+				originalImageUrl: image,
+				metadata: {
+					episodes: item.episodes,
+					season: item.season,
+					year: item.seasonYear,
+					format: item.format
+				}
+			};
+		});
+
+		try {
+			await setCachedSearch(platform?.env as Env, 'anime', q, results, 1);
+		} catch (e) {
+			console.error('Cache write error:', e);
+		}
+		return json(results);
+	} catch (e) {
+		console.error('AniList fetch error:', e);
+		error(502, { message: 'Failed to connect to AniList API' });
+	}
 };
