@@ -1,10 +1,11 @@
 <script lang="ts">
 	import { ListCreator } from '$lib/components';
-	import { listStore } from '$lib/stores';
+	import { listStore, searchStore } from '$lib/stores';
 	import { onMount } from 'svelte';
 
 	onMount(() => {
 		listStore.reset('anime');
+		searchStore.reset();
 	});
 </script>
 
