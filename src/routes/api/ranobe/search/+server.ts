@@ -42,39 +42,36 @@ export const GET: RequestHandler = async ({ url, platform }) => {
 
 		const books = (booksData.books ?? []) as Array<{
 			id: number;
-			name?: string;
-			translated_title?: string;
-			image?: string;
-			release_date?: string;
-			publisher?: { name?: string };
-			status?: string;
+			romaji?: string;
+			title?: string;
+			title_orig?: string;
+			c_release_date?: number;
+			image?: { filename?: string } | null;
 		}>;
 
 		const series = (seriesData.series ?? []) as Array<{
 			id: number;
-			name?: string;
-			translated_title?: string;
-			image?: string;
-			release_date?: string;
-			publisher?: { name?: string };
-			status?: string;
+			romaji?: string;
+			title?: string;
+			title_orig?: string;
+			c_release_date?: number;
+			image?: { filename?: string } | null;
 		}>;
 
 		const allItems = [...books, ...series];
 		results = allItems.map((item) => {
-			const image = item.image ?? '';
+			const imageFilename = item.image?.filename ?? '';
+			const imageUrl = imageFilename ? `https://images.ranobedb.org/${imageFilename}` : '';
 			return {
 				id: `ranobe_${item.id}`,
 				source: 'ranobe',
-				title: item.translated_title ?? item.name ?? String(item.id),
-				altTitle: item.name ?? undefined,
-				imageUrl: weservUrl(image, 400),
-				thumbnailUrl: weservUrl(image, 150),
-				originalImageUrl: image,
+				title: item.romaji ?? item.title ?? String(item.id),
+				altTitle: item.title_orig ?? item.title ?? undefined,
+				imageUrl: weservUrl(imageUrl, 400),
+				thumbnailUrl: weservUrl(imageUrl, 150),
+				originalImageUrl: imageUrl,
 				metadata: {
-					releaseDate: item.release_date,
-					publisher: item.publisher?.name,
-					status: item.status
+					releaseDate: item.c_release_date ? String(item.c_release_date) : undefined
 				}
 			};
 		});

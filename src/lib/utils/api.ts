@@ -1,15 +1,20 @@
 import type { SearchResult, Category } from '$lib/types';
+import { searchAniListAnime, searchAniListCharacters } from '$lib/utils/anilist';
 
 export async function searchAnime(query: string): Promise<SearchResult[]> {
-	const response = await fetch(`/api/anime/search?q=${encodeURIComponent(query)}`);
-	if (!response.ok) throw new Error('Failed to search anime');
-	return response.json();
+	return searchAniListAnime(query);
 }
 
 export async function searchCharacter(query: string): Promise<SearchResult[]> {
-	const response = await fetch(`/api/char/search?q=${encodeURIComponent(query)}`);
-	if (!response.ok) throw new Error('Failed to search character');
-	return response.json();
+	const [anilistResults, vndbResults] = await Promise.all([
+		searchAniListCharacters(query),
+		fetch(`/api/char/search?q=${encodeURIComponent(query)}`).then(async (res) => {
+			if (!res.ok) throw new Error('Failed to search character');
+			const data = await res.json() as SearchResult[];
+			return data.filter((item) => item.source === 'vndb');
+		}).catch(() => [])
+	]);
+	return [...anilistResults, ...vndbResults];
 }
 
 export async function searchRanobe(query: string): Promise<SearchResult[]> {
