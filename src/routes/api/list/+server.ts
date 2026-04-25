@@ -37,9 +37,18 @@ export const POST: RequestHandler = async ({ request, platform }) => {
 	const id = generateId();
 	const now = new Date().toISOString();
 
-	const db = platform?.env?.top_ten_db as D1Database | undefined;
+	if (!platform) {
+		console.error('[list] POST: platform object is missing');
+		error(500, { message: 'Platform not available' });
+	}
+	if (!platform.env) {
+		console.error('[list] POST: platform.env is missing');
+		error(500, { message: 'Environment bindings not available' });
+	}
+	const db = platform.env.top_ten_db as D1Database | undefined;
 	if (!db) {
-		error(500, { message: 'Database not available' });
+		console.error('[list] POST: top_ten_db binding is missing. Available env keys:', Object.keys(platform.env));
+		error(500, { message: 'Database binding top_ten_db not found' });
 	}
 
 	await db

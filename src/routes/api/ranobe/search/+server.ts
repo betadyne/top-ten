@@ -29,14 +29,18 @@ export const GET: RequestHandler = async ({ url, platform }) => {
 	let results: SearchResult[];
 	try {
 		const [booksRes, seriesRes] = await Promise.all([
-			fetch(`${RANOBEDB_ENDPOINT}/books?q=${encodeURIComponent(q)}&limit=12&page=1`),
-			fetch(`${RANOBEDB_ENDPOINT}/series?q=${encodeURIComponent(q)}&limit=12&page=1`)
+			fetch(`${RANOBEDB_ENDPOINT}/books?q=${encodeURIComponent(q)}&limit=12&page=1`, {
+				headers: { 'Accept': 'application/json' }
+			}),
+			fetch(`${RANOBEDB_ENDPOINT}/series?q=${encodeURIComponent(q)}&limit=12&page=1`, {
+				headers: { 'Accept': 'application/json' }
+			})
 		]);
 
-		const booksData = booksRes.ok ? (await booksRes.json() as { data?: Array<unknown> }) : { data: [] };
-		const seriesData = seriesRes.ok ? (await seriesRes.json() as { data?: Array<unknown> }) : { data: [] };
+		const booksData = booksRes.ok ? (await booksRes.json() as { books?: Array<unknown> }) : { books: [] };
+		const seriesData = seriesRes.ok ? (await seriesRes.json() as { series?: Array<unknown> }) : { series: [] };
 
-		const books = (booksData.data ?? []) as Array<{
+		const books = (booksData.books ?? []) as Array<{
 			id: number;
 			name?: string;
 			translated_title?: string;
@@ -46,7 +50,7 @@ export const GET: RequestHandler = async ({ url, platform }) => {
 			status?: string;
 		}>;
 
-		const series = (seriesData.data ?? []) as Array<{
+		const series = (seriesData.series ?? []) as Array<{
 			id: number;
 			name?: string;
 			translated_title?: string;
@@ -75,7 +79,7 @@ export const GET: RequestHandler = async ({ url, platform }) => {
 			};
 		});
 	} catch (e) {
-		console.error('[Service] fetch error:', e);
+		console.error('[ranobe] fetch error:', e instanceof Error ? e.message : String(e));
 		error(502, { message: 'Failed to connect to RanobeDB API' });
 	}
 

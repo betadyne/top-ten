@@ -11,9 +11,18 @@ export const GET: RequestHandler = async ({ params, platform }) => {
 	}
 	const id = parseResult.data;
 
-	const db = platform?.env?.top_ten_db as D1Database | undefined;
+	if (!platform) {
+		console.error('[list/id] GET: platform object is missing');
+		error(500, { message: 'Platform not available' });
+	}
+	if (!platform.env) {
+		console.error('[list/id] GET: platform.env is missing');
+		error(500, { message: 'Environment bindings not available' });
+	}
+	const db = platform.env.top_ten_db as D1Database | undefined;
 	if (!db) {
-		error(500, { message: 'Database not available' });
+		console.error('[list/id] GET: top_ten_db binding is missing. Available env keys:', Object.keys(platform.env));
+		error(500, { message: 'Database binding top_ten_db not found' });
 	}
 
 	const listRow = await db.prepare('SELECT * FROM lists WHERE id = ?').bind(id).first<{

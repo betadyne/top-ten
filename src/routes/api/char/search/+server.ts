@@ -29,88 +29,98 @@ const SEARCH_CHARACTER_QUERY = `
 `;
 
 async function searchAniListCharacters(q: string): Promise<SearchResult[]> {
-	const response = await fetch(ANILIST_ENDPOINT, {
-		method: 'POST',
-		headers: { 'Content-Type': 'application/json' },
-		body: JSON.stringify({
-			query: SEARCH_CHARACTER_QUERY,
-			variables: { search: q, page: 1, perPage: 12 }
-		})
-	});
+	try {
+		const response = await fetch(ANILIST_ENDPOINT, {
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+			body: JSON.stringify({
+				query: SEARCH_CHARACTER_QUERY,
+				variables: { search: q, page: 1, perPage: 12 }
+			})
+		});
 
-	if (!response.ok) return [];
+		if (!response.ok) return [];
 
-	const data = await response.json() as {
-		data?: {
-			Page?: {
-				characters?: Array<{
-					id: number;
-					name: { full?: string; native?: string };
-					image?: { medium?: string; large?: string };
-					media?: { nodes?: Array<{ title?: { romaji?: string } }> };
-				}>;
+		const data = await response.json() as {
+			data?: {
+				Page?: {
+					characters?: Array<{
+						id: number;
+						name: { full?: string; native?: string };
+						image?: { medium?: string; large?: string };
+						media?: { nodes?: Array<{ title?: { romaji?: string } }> };
+					}>;
+				};
 			};
 		};
-	};
 
-	const characters = data.data?.Page?.characters ?? [];
-	return characters.map((item) => {
-		const image = item.image?.large ?? item.image?.medium ?? '';
-		return {
-			id: `anilist_${item.id}`,
-			source: 'anilist',
-			title: item.name.full ?? String(item.id),
-			altTitle: item.name.native ?? undefined,
-			imageUrl: weservUrl(image, 400),
-			thumbnailUrl: weservUrl(image, 150),
-			originalImageUrl: image,
-			metadata: {
-				sourceName: item.media?.nodes?.[0]?.title?.romaji
-			}
-		};
-	});
+		const characters = data.data?.Page?.characters ?? [];
+		return characters.map((item) => {
+			const image = item.image?.large ?? item.image?.medium ?? '';
+			return {
+				id: `anilist_${item.id}`,
+				source: 'anilist',
+				title: item.name.full ?? String(item.id),
+				altTitle: item.name.native ?? undefined,
+				imageUrl: weservUrl(image, 400),
+				thumbnailUrl: weservUrl(image, 150),
+				originalImageUrl: image,
+				metadata: {
+					sourceName: item.media?.nodes?.[0]?.title?.romaji
+				}
+			};
+		});
+	} catch (e) {
+		console.error('[char] AniList fetch error:', e instanceof Error ? e.message : String(e));
+		return [];
+	}
 }
 
 async function searchVNDBCharacters(q: string): Promise<SearchResult[]> {
-	const response = await fetch(VNDB_ENDPOINT, {
-		method: 'POST',
-		headers: { 'Content-Type': 'application/json' },
-		body: JSON.stringify({
-			filters: ['search', '=', q],
-			fields: 'id, name, original, image.url, vns.title',
-			results: 12,
-			page: 1
-		})
-	});
+	try {
+		const response = await fetch(VNDB_ENDPOINT, {
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+			body: JSON.stringify({
+				filters: ['search', '=', q],
+				fields: 'id, name, original, image.url, vns.title',
+				results: 12,
+				page: 1
+			})
+		});
 
-	if (!response.ok) return [];
+		if (!response.ok) return [];
 
-	const data = await response.json() as {
-		results?: Array<{
-			id: string;
-			name: string;
-			original?: string;
-			image?: { url?: string };
-			vns?: Array<{ title?: string }>;
-		}>;
-	};
-
-	const characters = data.results ?? [];
-	return characters.map((item) => {
-		const image = item.image?.url ?? '';
-		return {
-			id: `vndb_${item.id}`,
-			source: 'vndb',
-			title: item.name,
-			altTitle: item.original ?? undefined,
-			imageUrl: weservUrl(image, 400),
-			thumbnailUrl: weservUrl(image, 150),
-			originalImageUrl: image,
-			metadata: {
-				sourceName: item.vns?.[0]?.title
-			}
+		const data = await response.json() as {
+			results?: Array<{
+				id: string;
+				name: string;
+				original?: string;
+				image?: { url?: string };
+				vns?: Array<{ title?: string }>;
+			}>;
 		};
-	});
+
+		const characters = data.results ?? [];
+		return characters.map((item) => {
+			const image = item.image?.url ?? '';
+			return {
+				id: `vndb_${item.id}`,
+				source: 'vndb',
+				title: item.name,
+				altTitle: item.original ?? undefined,
+				imageUrl: weservUrl(image, 400),
+				thumbnailUrl: weservUrl(image, 150),
+				originalImageUrl: image,
+				metadata: {
+					sourceName: item.vns?.[0]?.title
+				}
+			};
+		});
+	} catch (e) {
+		console.error('[char] VNDB fetch error:', e instanceof Error ? e.message : String(e));
+		return [];
+	}
 }
 
 export const GET: RequestHandler = async ({ url, platform }) => {
@@ -136,7 +146,7 @@ export const GET: RequestHandler = async ({ url, platform }) => {
 		]);
 		results = [...anilistResults, ...vndbResults];
 	} catch (e) {
-		console.error('[Service] fetch error:', e);
+		console.error('[char] fetch error:', e instanceof Error ? e.message : String(e));
 		error(502, { message: 'Failed to fetch character data' });
 	}
 

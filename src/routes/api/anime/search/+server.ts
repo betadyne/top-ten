@@ -45,7 +45,7 @@ export const GET: RequestHandler = async ({ url, platform }) => {
 	try {
 		const response = await fetch(ANILIST_ENDPOINT, {
 			method: 'POST',
-			headers: { 'Content-Type': 'application/json' },
+			headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
 			body: JSON.stringify({
 				query: SEARCH_ANIME_QUERY,
 				variables: { search: q, page: 1, perPage: 24 }
@@ -53,7 +53,8 @@ export const GET: RequestHandler = async ({ url, platform }) => {
 		});
 
 		if (!response.ok) {
-			console.error('AniList API error:', response.status, response.statusText);
+			const bodyText = await response.text();
+			console.error('AniList API error:', response.status, response.statusText, bodyText);
 			error(502, { message: `AniList API error: ${response.status} ${response.statusText}` });
 		}
 
@@ -106,7 +107,7 @@ export const GET: RequestHandler = async ({ url, platform }) => {
 		}
 		return json(results);
 	} catch (e) {
-		console.error('AniList fetch error:', e);
+		console.error('[anime] fetch error:', e instanceof Error ? e.message : String(e));
 		error(502, { message: 'Failed to connect to AniList API' });
 	}
 };

@@ -30,7 +30,7 @@ export const GET: RequestHandler = async ({ url, platform }) => {
 	try {
 		const response = await fetch(VNDB_ENDPOINT, {
 			method: 'POST',
-			headers: { 'Content-Type': 'application/json' },
+			headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
 			body: JSON.stringify({
 				filters: ['search', '=', q],
 				fields: 'id, title, alttitle, image.url, image.thumbnail, released, developers.name',
@@ -73,7 +73,7 @@ export const GET: RequestHandler = async ({ url, platform }) => {
 			};
 		});
 	} catch (e) {
-		console.error('[Service] fetch error:', e);
+		console.error('[vn] fetch error:', e instanceof Error ? e.message : String(e));
 		error(502, { message: 'Failed to connect to VNDB API' });
 	}
 
