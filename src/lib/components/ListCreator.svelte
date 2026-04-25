@@ -98,8 +98,8 @@
 		{:else if $searchStore.error}
 			<p class="error-msg-inline">{$searchStore.error}</p>
 		{:else if $searchStore.results.length > 0}
-			<fieldset class="search-results-fieldset">
-				<legend>Results</legend>
+			<section class="results-section">
+				<div class="section-header">Results</div>
 				<div class="search-results-scroll">
 					<div class="search-results">
 						{#each $searchStore.results as result (result.id)}
@@ -111,7 +111,7 @@
 						{/each}
 					</div>
 				</div>
-			</fieldset>
+			</section>
 		{:else}
 			<div class="list-creator-placeholder">
 				<p class="list-preview-empty">Search and click results to add them</p>
@@ -120,21 +120,23 @@
 	</div>
 
 	<div class="list-creator-right">
-		<fieldset class="selections-fieldset">
-			<legend>Selections ({$listStore.items.length}/10)</legend>
+		<section class="selections-section">
+			<div class="section-header">Selections ({$listStore.items.length}/10)</div>
 			{#if $listStore.items.length > 0}
-				<ol>
-					{#each $listStore.items as item (item.id)}
-						<ListItem {item} onRemove={handleRemove} />
-					{/each}
-				</ol>
+				<div class="selections-scroll">
+					<ol>
+						{#each $listStore.items as item (item.id)}
+							<ListItem {item} onRemove={handleRemove} />
+						{/each}
+					</ol>
+				</div>
 			{:else}
 				<div class="list-preview">
 					<div class="list-preview-title">Top 10 {categoryLabels[category]}</div>
 					<p class="list-preview-empty">Your list will appear here</p>
 				</div>
 			{/if}
-		</fieldset>
+		</section>
 
 		<fieldset>
 			<legend>Settings</legend>

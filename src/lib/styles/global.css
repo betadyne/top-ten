@@ -299,18 +299,36 @@ img {
 	flex-shrink: 0;
 }
 
-.list-creator-left fieldset.search-results-fieldset {
-	flex: 1;
-	min-height: 0;
+/* Section blocks (replacing fieldset for flexbox areas) */
+.results-section,
+.selections-section {
+	border: var(--border-medium);
+	padding: var(--space-4);
+	margin-bottom: var(--space-4);
 	display: flex;
 	flex-direction: column;
+	flex: 1;
+	min-height: 0;
 }
 
-.list-creator-left fieldset.search-results-fieldset legend {
+.section-header {
+	font-weight: 700;
+	padding: 0 var(--space-2);
+	text-transform: uppercase;
+	letter-spacing: 0.05em;
+	font-size: var(--text-sm);
+	margin-bottom: var(--space-3);
 	flex-shrink: 0;
 }
 
 .list-creator-left .search-results-scroll {
+	flex: 1;
+	min-height: 0;
+	overflow-y: auto;
+	padding-right: var(--space-2);
+}
+
+.selections-scroll {
 	flex: 1;
 	min-height: 0;
 	overflow-y: auto;
