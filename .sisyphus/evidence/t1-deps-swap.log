@@ -1,0 +1,18 @@
+=== T1 DEPENDENCY SWAP EVIDENCE ===
+Date: 2026-04-25
+
+ACTIONS:
+1. npm uninstall @dnd-kit/core
+2. npm install @dnd-kit/svelte @dnd-kit/dom
+
+VERIFICATION:
+- package.json dependencies:
+  "@dnd-kit/dom": "^0.4.0"
+  "@dnd-kit/svelte": "^0.4.0"
+  (no @dnd-kit/core)
+
+- node_modules/@dnd-kit/svelte: EXISTS
+
+- npm run build: PASSED (✓ built in 3.12s)
+
+OUTCOME: ✓ All checks passed

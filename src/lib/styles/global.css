@@ -463,7 +463,7 @@ img {
 /* List Item */
 .list-item {
   display: grid;
-  grid-template-columns: 24px 32px 60px 1fr auto;
+  grid-template-columns: 32px 60px 1fr auto;
   gap: var(--space-3);
   align-items: center;
   padding: var(--space-3) var(--space-4);
@@ -479,23 +479,6 @@ img {
   border: var(--border-medium);
   background: var(--hover-bg);
   color: var(--hover-fg);
-}
-
-.drag-handle {
-  cursor: grab;
-  padding: 0 var(--space-1);
-  font-size: var(--text-sm);
-  color: var(--muted);
-  user-select: none;
-  line-height: 1;
-}
-
-.drag-handle:hover {
-  color: var(--fg);
-}
-
-.drag-handle:active {
-  cursor: grabbing;
 }
 
 .list-item-rank {

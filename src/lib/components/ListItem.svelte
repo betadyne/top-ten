@@ -31,7 +31,6 @@
 </script>
 
 <li class="list-item" class:dragging={sortable.isDragging} data-rank={item.rank} {@attach sortable.attach}>
-	<span class="drag-handle" {@attach sortable.attachHandle}>⋮⋮</span>
 	<span class="list-item-rank">{item.rank}</span>
 	<img src={fallbackSrc ?? imgSrc} alt={item.title} loading="lazy" width="60" onerror={handleError} />
 	<div class="list-item-info">

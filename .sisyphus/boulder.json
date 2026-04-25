@@ -1,0 +1,35 @@
+{
+  "active_plan": "/mnt/Data/Tugas/Project/top-ten/.sisyphus/plans/ranking-dnd.md",
+  "started_at": "2026-04-25T11:51:03.712Z",
+  "session_ids": [
+    "ses_24171269cffes5P4FWe7uZb7DH",
+    "ses_23b847653ffeWDqTh15Zh6PKDs",
+    "ses_23b8465d5ffeNNFRjvJADxLMrV",
+    "ses_23b7a8401ffeMKTjAv11g9o5s3",
+    "ses_23b7a5b79ffeMC47Ykt7IXdPyU",
+    "ses_23b7a2dd1ffep6SMW1uZss6rSk",
+    "ses_23b79fb3fffedPRVyKLyUUPCc8"
+  ],
+  "session_origins": {
+    "ses_24171269cffes5P4FWe7uZb7DH": "direct",
+    "ses_23b847653ffeWDqTh15Zh6PKDs": "appended",
+    "ses_23b8465d5ffeNNFRjvJADxLMrV": "appended",
+    "ses_23b7a8401ffeMKTjAv11g9o5s3": "appended",
+    "ses_23b7a5b79ffeMC47Ykt7IXdPyU": "appended",
+    "ses_23b7a2dd1ffep6SMW1uZss6rSk": "appended",
+    "ses_23b79fb3fffedPRVyKLyUUPCc8": "appended"
+  },
+  "plan_name": "ranking-dnd",
+  "agent": "atlas",
+  "task_sessions": {
+    "final-wave:f1": {
+      "task_key": "final-wave:f1",
+      "task_label": "F1",
+      "task_title": "**Plan Compliance Audit** — `oracle`",
+      "session_id": "ses_23b71c27affeyUG1YCepXasF0g",
+      "agent": "Sisyphus-Junior",
+      "category": "quick",
+      "updated_at": "2026-04-25T12:16:00.790Z"
+    }
+  }
+}

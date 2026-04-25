@@ -148,7 +148,7 @@
 	{#if $listStore.items.length > 0}
 		<DragDropProvider onDragEnd={handleDragEnd}>
 			<section class="selections-section">
-				<div class="section-header">Selections ({$listStore.items.length}/10)</div>
+				<div class="section-header">Top 10 {categoryLabels[category]}</div>
 				<ol class="selections-list">
 					{#each $listStore.items as item, index (item.id)}
 						<ListItem {item} {index} onRemove={handleRemove} />
