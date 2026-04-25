@@ -273,24 +273,29 @@ img {
 	grid-template-columns: var(--grid-2col);
 	gap: var(--space-6);
 	align-items: start;
-	height: calc(100vh - 120px);
-	min-height: 600px;
 }
 
 @media (max-width: 768px) {
 	.list-creator {
 		grid-template-columns: 1fr;
-		height: auto;
 	}
 }
 
-.list-creator-left,
+.list-creator-left {
+	position: sticky;
+	top: 20px;
+	align-self: start;
+	max-height: calc(100vh - 40px);
+	overflow-y: auto;
+	display: flex;
+	flex-direction: column;
+	gap: 0;
+}
+
 .list-creator-right {
 	display: flex;
 	flex-direction: column;
 	gap: 0;
-	height: 100%;
-	overflow: hidden;
 }
 
 .list-creator-left fieldset,
@@ -305,10 +310,6 @@ img {
 	border: var(--border-medium);
 	padding: var(--space-4);
 	margin-bottom: var(--space-4);
-	display: flex;
-	flex-direction: column;
-	flex: 1;
-	min-height: 0;
 }
 
 .section-header {
@@ -318,19 +319,10 @@ img {
 	letter-spacing: 0.05em;
 	font-size: var(--text-sm);
 	margin-bottom: var(--space-3);
-	flex-shrink: 0;
 }
 
 .list-creator-left .search-results-scroll {
-	flex: 1;
-	min-height: 0;
-	overflow-y: auto;
-	padding-right: var(--space-2);
-}
-
-.selections-scroll {
-	flex: 1;
-	min-height: 0;
+	max-height: calc(100vh - 200px);
 	overflow-y: auto;
 	padding-right: var(--space-2);
 }

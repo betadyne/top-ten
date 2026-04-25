@@ -123,13 +123,11 @@
 		<section class="selections-section">
 			<div class="section-header">Selections ({$listStore.items.length}/10)</div>
 			{#if $listStore.items.length > 0}
-				<div class="selections-scroll">
-					<ol>
-						{#each $listStore.items as item (item.id)}
-							<ListItem {item} onRemove={handleRemove} />
-						{/each}
-					</ol>
-				</div>
+				<ol class="selections-list">
+					{#each $listStore.items as item (item.id)}
+						<ListItem {item} onRemove={handleRemove} />
+					{/each}
+				</ol>
 			{:else}
 				<div class="list-preview">
 					<div class="list-preview-title">Top 10 {categoryLabels[category]}</div>
