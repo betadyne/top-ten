@@ -87,12 +87,48 @@
 </script>
 
 <div class="list-creator">
-	<div class="list-creator-controls">
+	<div class="list-creator-left">
 		<fieldset>
 			<legend>Search</legend>
 			<SearchBar {placeholder} onSearch={handleSearch} />
 		</fieldset>
 
+		{#if $searchStore.loading}
+			<p class="loading-msg">Loading...</p>
+		{:else if $searchStore.error}
+			<p class="error-msg-inline">{$searchStore.error}</p>
+		{:else if $searchStore.results.length > 0}
+			<fieldset class="search-results-fieldset">
+				<legend>Results</legend>
+				<div class="search-results-scroll">
+					<div class="search-results">
+						{#each $searchStore.results as result (result.id)}
+							<ItemCard
+								item={result}
+								onAdd={handleAdd}
+								disabled={$listStore.items.length >= 10 || $listStore.items.some((i) => i.id === result.id)}
+							/>
+						{/each}
+					</div>
+				</div>
+			</fieldset>
+		{:else}
+			<div class="list-preview">
+				<div class="list-preview-title">Top 10 {categoryLabels[category]}</div>
+				{#if $listStore.items.length > 0}
+					<ol>
+						{#each $listStore.items as item (item.id)}
+							<ListItem {item} onRemove={handleRemove} />
+						{/each}
+					</ol>
+				{:else}
+					<p class="list-preview-empty">Search and add items to your list</p>
+				{/if}
+			</div>
+		{/if}
+	</div>
+
+	<div class="list-creator-right">
 		<fieldset>
 			<legend>Selections ({$listStore.items.length}/10)</legend>
 			{#if $listStore.items.length > 0}
@@ -146,39 +182,5 @@
 				{saving ? 'Saving...' : 'Save List'}
 			</button>
 		</fieldset>
-	</div>
-
-	<div>
-		{#if $searchStore.loading}
-			<p class="loading-msg">Loading...</p>
-		{:else if $searchStore.error}
-			<p class="error-msg-inline">{$searchStore.error}</p>
-		{:else if $searchStore.results.length > 0}
-			<fieldset>
-				<legend>Results</legend>
-				<div class="search-results">
-					{#each $searchStore.results as result (result.id)}
-						<ItemCard
-							item={result}
-							onAdd={handleAdd}
-							disabled={$listStore.items.length >= 10 || $listStore.items.some((i) => i.id === result.id)}
-						/>
-					{/each}
-				</div>
-			</fieldset>
-		{:else}
-			<div class="list-preview">
-				<div class="list-preview-title">Top 10 {categoryLabels[category]}</div>
-				{#if $listStore.items.length > 0}
-					<ol>
-						{#each $listStore.items as item (item.id)}
-							<ListItem {item} onRemove={handleRemove} />
-						{/each}
-					</ol>
-				{:else}
-					<p class="list-preview-empty">Your list will appear here</p>
-				{/if}
-			</div>
-		{/if}
 	</div>
 </div>
