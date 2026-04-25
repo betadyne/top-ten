@@ -1,0 +1,184 @@
+<script lang="ts">
+	import type { Category, SearchResult } from '$lib/types';
+	import { searchStore, listStore } from '$lib/stores';
+	import { searchByCategory, createList } from '$lib/utils/api';
+	import { SearchBar, ItemCard, ListItem } from '$lib/components';
+	import { goto } from '$app/navigation';
+	import { get } from 'svelte/store';
+
+	let { category, placeholder }: { category: Category; placeholder: string } = $props();
+
+	let saving = $state(false);
+	let error = $state<string | null>(null);
+
+	const categoryLabels: Record<Category, string> = {
+		anime: 'Anime',
+		character: 'Character',
+		'light-novel': 'Light Novel',
+		'visual-novel': 'Visual Novel'
+	};
+
+	async function handleSearch(query: string) {
+		if (!query.trim()) {
+			searchStore.reset();
+			return;
+		}
+		searchStore.setLoading(true);
+		searchStore.setError(null);
+		try {
+			const results = await searchByCategory(category, query);
+			searchStore.setResults(results);
+		} catch (err) {
+			searchStore.setError(err instanceof Error ? err.message : 'Search failed');
+		}
+	}
+
+	function handleAdd(item: SearchResult) {
+		listStore.addItem({
+			...item,
+			category,
+			rank: 0,
+			metadata: item.metadata ?? {}
+		});
+	}
+
+	function handleRemove(id: string) {
+		listStore.removeItem(id);
+	}
+
+	async function handleSave() {
+		const state = get(listStore);
+		if (!state.title.trim()) {
+			error = 'Title is required';
+			return;
+		}
+		if (state.items.length === 0) {
+			error = 'Add at least one item';
+			return;
+		}
+		saving = true;
+		error = null;
+		try {
+			const payload = {
+				title: state.title,
+				category: state.category,
+				items: state.items.map((item) => ({
+					id: item.id,
+					source: item.source,
+					rank: item.rank,
+					title: item.title,
+					altTitle: item.altTitle ?? '',
+					imageUrl: item.imageUrl,
+					thumbnailUrl: item.thumbnailUrl,
+					originalImageUrl: item.originalImageUrl,
+					metadata: JSON.stringify(item.metadata ?? {})
+				})),
+				creatorName: state.creatorName || undefined,
+				isPublic: state.isPublic
+			};
+			const { id } = await createList(payload);
+			goto(`/list/${id}`);
+		} catch (err) {
+			error = err instanceof Error ? err.message : 'Failed to save list';
+		} finally {
+			saving = false;
+		}
+	}
+</script>
+
+<div class="list-creator">
+	<div class="list-creator-controls">
+		<fieldset>
+			<legend>Search</legend>
+			<SearchBar {placeholder} onSearch={handleSearch} />
+		</fieldset>
+
+		<fieldset>
+			<legend>Selections ({$listStore.items.length}/10)</legend>
+			{#if $listStore.items.length > 0}
+				<ol>
+					{#each $listStore.items as item (item.id)}
+						<ListItem {item} onRemove={handleRemove} />
+					{/each}
+				</ol>
+			{:else}
+				<p class="list-preview-empty">No items yet. Search and add items.</p>
+			{/if}
+		</fieldset>
+
+		<fieldset>
+			<legend>Settings</legend>
+			<label>
+				List Title
+				<input
+					type="text"
+					value={$listStore.title}
+					oninput={(e) => listStore.setTitle(e.currentTarget.value)}
+					maxlength="100"
+					required
+				/>
+			</label>
+
+			<label>
+				Your Name (optional)
+				<input
+					type="text"
+					value={$listStore.creatorName}
+					oninput={(e) => listStore.setCreatorName(e.currentTarget.value)}
+					maxlength="50"
+				/>
+			</label>
+
+			<label class="checkbox-label">
+				<input
+					type="checkbox"
+					checked={$listStore.isPublic}
+					onchange={(e) => listStore.setIsPublic(e.currentTarget.checked)}
+				/>
+				Public
+			</label>
+
+			{#if error}
+				<p class="error-msg">{error}</p>
+			{/if}
+
+			<button type="button" onclick={handleSave} disabled={saving || $listStore.items.length === 0}>
+				{saving ? 'Saving...' : 'Save List'}
+			</button>
+		</fieldset>
+	</div>
+
+	<div>
+		{#if $searchStore.loading}
+			<p class="loading-msg">Loading...</p>
+		{:else if $searchStore.error}
+			<p class="error-msg-inline">{$searchStore.error}</p>
+		{:else if $searchStore.results.length > 0}
+			<fieldset>
+				<legend>Results</legend>
+				<div class="search-results">
+					{#each $searchStore.results as result}
+						<ItemCard
+							item={result}
+							onAdd={handleAdd}
+							disabled={$listStore.items.length >= 10 || $listStore.items.some((i) => i.id === result.id)}
+						/>
+					{/each}
+				</div>
+			</fieldset>
+		{:else}
+			<div class="list-preview">
+				<div class="list-preview-title">Top 10 {categoryLabels[category]}</div>
+				{#if $listStore.items.length > 0}
+					<ol>
+						{#each $listStore.items as item (item.id)}
+							<ListItem {item} onRemove={handleRemove} />
+						{/each}
+					</ol>
+				{:else}
+					<p class="list-preview-empty">Your list will appear here</p>
+				{/if}
+			</div>
+		{/if}
+	</div>
+</div>

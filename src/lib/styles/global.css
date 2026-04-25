@@ -1,0 +1,463 @@
+/* ========================================
+   TOP 10 LIST MAKER — Monochrome Design System
+   Inspired by anime-bingo.aikats.us
+   ======================================== */
+
+:root {
+	/* Palette */
+	--bg: #fff;
+	--fg: #000;
+	--border: #333;
+	--muted: #666;
+	--light-border: #ccc;
+	--hover-bg: #000;
+	--hover-fg: #fff;
+	--disabled-bg: #eee;
+	--disabled-fg: #999;
+
+	/* Spacing */
+	--space-1: 4px;
+	--space-2: 8px;
+	--space-3: 12px;
+	--space-4: 16px;
+	--space-5: 20px;
+	--space-6: 24px;
+	--space-8: 32px;
+	--space-10: 40px;
+	--space-12: 48px;
+
+	/* Typography */
+	--font-body: 'Courier New', Courier, monospace;
+	--font-heading: 'Courier New', Courier, monospace;
+	--text-xs: 0.75rem;
+	--text-sm: 0.875rem;
+	--text-base: 1rem;
+	--text-lg: 1.125rem;
+	--text-xl: 1.25rem;
+	--text-2xl: 1.5rem;
+	--text-3xl: 2rem;
+	--text-4xl: 2.5rem;
+
+	/* Borders */
+	--border-thin: 1px solid var(--border);
+	--border-medium: 2px solid var(--border);
+	--border-thick: 3px solid var(--border);
+	--border-heavy: 4px solid var(--fg);
+
+	/* Layout */
+	--max-width: 1200px;
+	--grid-2col: 2fr 3fr;
+}
+
+/* Reset */
+*,
+*::before,
+*::after {
+	box-sizing: border-box;
+	margin: 0;
+	padding: 0;
+}
+
+/* Base */
+html {
+	font-size: 16px;
+	-webkit-text-size-adjust: 100%;
+}
+
+body {
+	background: var(--bg);
+	color: var(--fg);
+	font-family: var(--font-body);
+	font-size: var(--text-base);
+	line-height: 1.5;
+	min-height: 100vh;
+}
+
+/* Typography */
+h1, h2, h3, h4, h5, h6 {
+	font-family: var(--font-heading);
+	font-weight: 700;
+	line-height: 1.2;
+}
+
+h1 { font-size: var(--text-4xl); }
+h2 { font-size: var(--text-2xl); }
+h3 { font-size: var(--text-xl); }
+h4 { font-size: var(--text-lg); }
+
+p {
+	margin-bottom: var(--space-3);
+}
+
+small {
+	font-size: var(--text-xs);
+	color: var(--muted);
+}
+
+/* Links */
+a {
+	color: var(--fg);
+	text-decoration: underline;
+}
+
+a:hover {
+	color: var(--fg);
+}
+
+/* Buttons */
+button {
+	background: var(--bg);
+	border: var(--border-medium);
+	color: var(--fg);
+	cursor: pointer;
+	font-family: var(--font-body);
+	font-size: var(--text-sm);
+	padding: var(--space-2) var(--space-4);
+	text-transform: uppercase;
+	letter-spacing: 0.05em;
+}
+
+button:hover:not(:disabled) {
+	background: var(--hover-bg);
+	color: var(--hover-fg);
+}
+
+button:disabled {
+	background: var(--disabled-bg);
+	color: var(--disabled-fg);
+	cursor: not-allowed;
+}
+
+/* Inputs */
+input[type='text'],
+input[type='search'] {
+	background: var(--bg);
+	border: var(--border-medium);
+	color: var(--fg);
+	font-family: var(--font-body);
+	font-size: var(--text-base);
+	padding: var(--space-2) var(--space-3);
+	width: 100%;
+}
+
+input[type='text']:focus,
+input[type='search']:focus {
+	outline: 2px solid var(--fg);
+	outline-offset: -2px;
+}
+
+input[type='checkbox'] {
+	accent-color: var(--fg);
+	width: 16px;
+	height: 16px;
+}
+
+/* Fieldsets */
+fieldset {
+	border: var(--border-medium);
+	padding: var(--space-4);
+	margin-bottom: var(--space-4);
+}
+
+legend {
+	font-weight: 700;
+	padding: 0 var(--space-2);
+	text-transform: uppercase;
+	letter-spacing: 0.05em;
+	font-size: var(--text-sm);
+}
+
+/* Lists */
+ol, ul {
+	list-style: none;
+}
+
+/* Images */
+img {
+	display: block;
+	max-width: 100%;
+}
+
+/* Layout */
+.layout-header {
+	border-bottom: var(--border-thick);
+	padding: var(--space-6) var(--space-4);
+	text-align: center;
+}
+
+.layout-header h1 {
+	font-size: var(--text-3xl);
+	text-transform: uppercase;
+	letter-spacing: 0.1em;
+}
+
+.layout-header h1 a {
+	text-decoration: none;
+}
+
+.layout-main {
+	max-width: var(--max-width);
+	margin: 0 auto;
+	padding: var(--space-6) var(--space-4);
+}
+
+.layout-footer {
+	border-top: var(--border-thick);
+	padding: var(--space-4);
+	text-align: center;
+	font-size: var(--text-sm);
+	color: var(--muted);
+}
+
+/* Homepage */
+.home-title {
+	text-align: center;
+	margin-bottom: var(--space-2);
+	text-transform: uppercase;
+	letter-spacing: 0.1em;
+}
+
+.home-subtitle {
+	text-align: center;
+	color: var(--muted);
+	margin-bottom: var(--space-8);
+	font-size: var(--text-sm);
+}
+
+.category-grid {
+	display: grid;
+	grid-template-columns: repeat(2, 1fr);
+	gap: var(--space-4);
+}
+
+@media (max-width: 600px) {
+	.category-grid {
+		grid-template-columns: 1fr;
+	}
+}
+
+/* Category Card */
+.category-card {
+	display: block;
+	border: var(--border-thick);
+	padding: var(--space-6);
+	text-decoration: none;
+	background: var(--bg);
+	color: var(--fg);
+}
+
+.category-card:hover {
+	background: var(--hover-bg);
+	color: var(--hover-fg);
+}
+
+.category-card h2 {
+	margin-bottom: var(--space-2);
+	text-transform: uppercase;
+	letter-spacing: 0.05em;
+}
+
+.category-card p {
+	color: var(--muted);
+	font-size: var(--text-sm);
+	margin-bottom: 0;
+}
+
+.category-card:hover p {
+	color: var(--light-border);
+}
+
+/* List Creator — 2-column layout */
+.list-creator {
+	display: grid;
+	grid-template-columns: var(--grid-2col);
+	gap: var(--space-6);
+	align-items: start;
+}
+
+@media (max-width: 768px) {
+	.list-creator {
+		grid-template-columns: 1fr;
+	}
+}
+
+.list-creator-controls {
+	display: flex;
+	flex-direction: column;
+	gap: 0;
+}
+
+.list-creator-controls fieldset {
+	margin-bottom: var(--space-4);
+}
+
+.list-creator-controls label {
+	display: block;
+	margin-bottom: var(--space-3);
+	font-size: var(--text-sm);
+	text-transform: uppercase;
+	letter-spacing: 0.05em;
+}
+
+.list-creator-controls input[type='text'],
+.list-creator-controls input[type='search'] {
+	margin-top: var(--space-1);
+}
+
+.list-creator-controls .checkbox-label {
+	display: flex;
+	align-items: center;
+	gap: var(--space-2);
+	font-size: var(--text-sm);
+	text-transform: uppercase;
+	letter-spacing: 0.05em;
+}
+
+.list-creator-controls .error-msg {
+	color: var(--fg);
+	font-weight: 700;
+	font-size: var(--text-sm);
+	margin-bottom: var(--space-3);
+	border: 2px solid var(--fg);
+	padding: var(--space-2) var(--space-3);
+}
+
+/* Search results grid */
+.search-results {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+	gap: var(--space-3);
+}
+
+/* Item Card */
+.item-card {
+	border: var(--border-thin);
+	background: var(--bg);
+	padding: var(--space-2);
+}
+
+.item-card:hover {
+	background: var(--disabled-bg);
+}
+
+.item-card img {
+	width: 100%;
+	aspect-ratio: 3 / 4;
+	object-fit: cover;
+	margin-bottom: var(--space-2);
+}
+
+.item-card h3 {
+	font-size: var(--text-sm);
+	margin-bottom: var(--space-1);
+	line-height: 1.3;
+}
+
+.item-card p {
+	font-size: var(--text-xs);
+	color: var(--muted);
+	margin-bottom: var(--space-2);
+}
+
+.item-card button {
+	width: 100%;
+	font-size: var(--text-xs);
+	padding: var(--space-1) var(--space-2);
+}
+
+/* List Preview */
+.list-preview {
+	border: var(--border-heavy);
+	padding: 0;
+}
+
+.list-preview-title {
+	text-align: center;
+	font-size: var(--text-xl);
+	text-transform: uppercase;
+	letter-spacing: 0.1em;
+	padding: var(--space-4);
+	border-bottom: var(--border-heavy);
+	font-weight: 700;
+}
+
+.list-preview-empty {
+	padding: var(--space-8) var(--space-4);
+	text-align: center;
+	color: var(--muted);
+	font-size: var(--text-sm);
+}
+
+/* List Item */
+.list-item {
+	display: grid;
+	grid-template-columns: 40px 60px 1fr auto;
+	gap: var(--space-3);
+	align-items: center;
+	padding: var(--space-3) var(--space-4);
+	border-bottom: var(--border-thin);
+}
+
+.list-item:last-child {
+	border-bottom: none;
+}
+
+.list-item-rank {
+	font-size: var(--text-2xl);
+	font-weight: 700;
+	text-align: center;
+}
+
+.list-item img {
+	width: 60px;
+	height: 80px;
+	object-fit: cover;
+}
+
+.list-item-info h4 {
+	font-size: var(--text-base);
+	margin-bottom: var(--space-1);
+}
+
+.list-item-info p {
+	font-size: var(--text-xs);
+	color: var(--muted);
+	margin-bottom: 0;
+}
+
+.list-item button {
+	font-size: var(--text-xs);
+	padding: var(--space-1) var(--space-2);
+	white-space: nowrap;
+}
+
+/* Search form */
+.search-form {
+	display: flex;
+	gap: var(--space-2);
+}
+
+.search-form input {
+	flex: 1;
+}
+
+.search-form button {
+	white-space: nowrap;
+}
+
+/* Loading & error states */
+.loading-msg,
+.error-msg-inline {
+	padding: var(--space-4);
+	text-align: center;
+	font-size: var(--text-sm);
+}
+
+.loading-msg {
+	color: var(--muted);
+}
+
+.error-msg-inline {
+	color: var(--fg);
+	font-weight: 700;
+}

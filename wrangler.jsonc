@@ -1,0 +1,21 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "top-ten",
+  "compatibility_date": "2026-04-24",
+  "compatibility_flags": ["nodejs_als"],
+  "pages_build_output_dir": ".svelte-kit/cloudflare",
+  "d1_databases": [
+    {
+      "binding": "top_ten_db",
+      "database_name": "top-ten-db",
+      "database_id": "940bf4b3-59fc-494d-99a0-0c6b7a4dc816",
+      "remote": true,
+    },
+  ],
+  "kv_namespaces": [
+    {
+      "binding": "KV",
+      "id": "2451bf6a66b7412f9fe0c33c3a0b8af1",
+    },
+  ],
+}
