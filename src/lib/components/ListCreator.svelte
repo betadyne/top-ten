@@ -113,23 +113,14 @@
 				</div>
 			</fieldset>
 		{:else}
-			<div class="list-preview">
-				<div class="list-preview-title">Top 10 {categoryLabels[category]}</div>
-				{#if $listStore.items.length > 0}
-					<ol>
-						{#each $listStore.items as item (item.id)}
-							<ListItem {item} onRemove={handleRemove} />
-						{/each}
-					</ol>
-				{:else}
-					<p class="list-preview-empty">Search and add items to your list</p>
-				{/if}
+			<div class="list-creator-placeholder">
+				<p class="list-preview-empty">Search and click results to add them</p>
 			</div>
 		{/if}
 	</div>
 
 	<div class="list-creator-right">
-		<fieldset>
+		<fieldset class="selections-fieldset">
 			<legend>Selections ({$listStore.items.length}/10)</legend>
 			{#if $listStore.items.length > 0}
 				<ol>
@@ -138,7 +129,10 @@
 					{/each}
 				</ol>
 			{:else}
-				<p class="list-preview-empty">No items yet. Search and add items.</p>
+				<div class="list-preview">
+					<div class="list-preview-title">Top 10 {categoryLabels[category]}</div>
+					<p class="list-preview-empty">Your list will appear here</p>
+				</div>
 			{/if}
 		</fieldset>
 
