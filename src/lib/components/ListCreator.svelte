@@ -147,14 +147,14 @@
 	<div class="list-creator-right">
 	{#if $listStore.items.length > 0}
 		<DragDropProvider onDragEnd={handleDragEnd}>
-			<section class="selections-section">
-				<div class="section-header">Top 10 {categoryLabels[category]}</div>
+			<div class="list-preview">
+				<div class="list-preview-title">Top 10 {categoryLabels[category]}</div>
 				<ol class="selections-list">
 					{#each $listStore.items as item, index (item.id)}
 						<ListItem {item} {index} onRemove={handleRemove} />
 					{/each}
 				</ol>
-			</section>
+			</div>
 		</DragDropProvider>
 	{:else}
 		<div class="list-preview">
