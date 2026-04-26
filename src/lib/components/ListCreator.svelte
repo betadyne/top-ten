@@ -1,18 +1,13 @@
 <script lang="ts">
 	import type { Category, SearchResult } from '$lib/types';
 	import { searchStore, listStore } from '$lib/stores';
-	import { searchByCategory, createList } from '$lib/utils/api';
+	import { searchByCategory } from '$lib/utils/api';
 	import { SearchBar, ItemCard, ListItem } from '$lib/components';
-	import { goto } from '$app/navigation';
 	import { get } from 'svelte/store';
 	import { DragDropProvider } from '@dnd-kit/svelte';
-	import { isSortable } from '@dnd-kit/svelte/sortable';
-	import type { DragEndEvent, Droppable } from '@dnd-kit/abstract';
+	import type { DragEndEvent } from '@dnd-kit/abstract';
 
 	let { category, placeholder }: { category: Category; placeholder: string } = $props();
-
-	let saving = $state(false);
-	let error = $state<string | null>(null);
 
 	const categoryLabels: Record<Category, string> = {
 		anime: 'Anime',
@@ -70,45 +65,6 @@
 		result.splice(to, 0, removed);
 		return result;
 	}
-
-	async function handleSave() {
-		const state = get(listStore);
-		if (!state.title.trim()) {
-			error = 'Title is required';
-			return;
-		}
-		if (state.items.length === 0) {
-			error = 'Add at least one item';
-			return;
-		}
-		saving = true;
-		error = null;
-		try {
-			const payload = {
-				title: state.title,
-				category: state.category,
-				items: state.items.map((item) => ({
-					id: item.id,
-					source: item.source,
-					rank: item.rank,
-					title: item.title,
-					altTitle: item.altTitle ?? '',
-					imageUrl: item.imageUrl,
-					thumbnailUrl: item.thumbnailUrl,
-					originalImageUrl: item.originalImageUrl,
-					metadata: JSON.stringify(item.metadata ?? {})
-				})),
-				creatorName: state.creatorName || undefined,
-				isPublic: state.isPublic
-			};
-			const { id } = await createList(payload);
-			goto(`/list/${id}`);
-		} catch (err) {
-			error = err instanceof Error ? err.message : 'Failed to save list';
-		} finally {
-			saving = false;
-		}
-	}
 </script>
 
 <div class="list-creator">
@@ -148,17 +104,24 @@
 	{#if $listStore.items.length > 0}
 		<DragDropProvider onDragEnd={handleDragEnd}>
 			<div class="list-preview">
-				<div class="list-preview-title">Top 10 {categoryLabels[category]}</div>
+				<div class="list-preview-title">
+					{$listStore.title.trim() || `Top 10 ${categoryLabels[category]}`}
+				</div>
 				<ol class="selections-list">
 					{#each $listStore.items as item, index (item.id)}
 						<ListItem {item} {index} onRemove={handleRemove} />
 					{/each}
 				</ol>
+				<div class="list-watermark">
+					This list was created by {$listStore.creatorName.trim() || 'Anonymous'}
+				</div>
 			</div>
 		</DragDropProvider>
 	{:else}
 		<div class="list-preview">
-			<div class="list-preview-title">Top 10 {categoryLabels[category]}</div>
+			<div class="list-preview-title">
+				{$listStore.title.trim() || `Top 10 ${categoryLabels[category]}`}
+			</div>
 			<p class="list-preview-empty">Your list will appear here</p>
 		</div>
 	{/if}
@@ -186,22 +149,10 @@
 				/>
 			</label>
 
-			<label class="checkbox-label">
-				<input
-					type="checkbox"
-					checked={$listStore.isPublic}
-					onchange={(e) => listStore.setIsPublic(e.currentTarget.checked)}
-				/>
-				Public
-			</label>
-
-			{#if error}
-				<p class="error-msg">{error}</p>
-			{/if}
-
-			<button type="button" onclick={handleSave} disabled={saving || $listStore.items.length === 0}>
-				{saving ? 'Saving...' : 'Save List'}
-			</button>
+			<div class="action-buttons">
+				<button type="button" disabled>Export Image</button>
+				<button type="button" disabled>Copy Link</button>
+			</div>
 		</fieldset>
 	</div>
 </div>

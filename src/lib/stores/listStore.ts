@@ -6,7 +6,6 @@ export interface ListState {
 	category: Category;
 	items: ListItem[];
 	creatorName: string;
-	isPublic: boolean;
 }
 
 function createListStore() {
@@ -14,8 +13,7 @@ function createListStore() {
 		title: '',
 		category: 'anime',
 		items: [],
-		creatorName: '',
-		isPublic: true
+		creatorName: ''
 	});
 
 	return {
@@ -45,12 +43,10 @@ function createListStore() {
 				title: '',
 				category,
 				items: [],
-				creatorName: '',
-				isPublic: true
+				creatorName: ''
 			}),
 		setTitle: (title: string) => update((state) => ({ ...state, title })),
-		setCreatorName: (name: string) => update((state) => ({ ...state, creatorName: name })),
-		setIsPublic: (isPublic: boolean) => update((state) => ({ ...state, isPublic }))
+		setCreatorName: (name: string) => update((state) => ({ ...state, creatorName: name }))
 	};
 }
 
