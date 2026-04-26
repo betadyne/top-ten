@@ -1,5 +1,5 @@
 <script lang="ts">
-	import '$lib/styles/global.css';
+	import '../app.css';
 	import favicon from '$lib/assets/favicon.svg';
 
 	let { children } = $props();
@@ -9,14 +9,20 @@
 	<link rel="icon" href={favicon} />
 </svelte:head>
 
-<header class="layout-header">
-	<h1><a href="/">Top 10 List Maker</a></h1>
+<header class="w-full py-8 md:py-12">
+	<div class="max-w-5xl mx-auto px-6">
+		<h1 class="font-display text-2xl md:text-3xl font-bold uppercase tracking-tighter">
+			<a href="/" class="hover:text-[var(--color-accent)] transition-colors">Top 10 List Maker</a>
+		</h1>
+	</div>
 </header>
 
-<main class="layout-main">
+<main class="w-full max-w-5xl mx-auto px-6 py-8 md:py-16">
 	{@render children()}
 </main>
 
-<footer class="layout-footer">
-	<p>Top 10 List Maker</p>
+<footer class="w-full py-8 md:py-12 border-t border-[var(--color-border)]">
+	<div class="max-w-5xl mx-auto px-6 text-center">
+		<p class="text-editorial-label">Top 10 List Maker</p>
+	</div>
 </footer>
