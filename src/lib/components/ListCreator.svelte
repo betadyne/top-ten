@@ -67,22 +67,22 @@
 	}
 </script>
 
-<div class="list-creator">
-	<div class="list-creator-left">
-		<fieldset>
-			<legend>Search</legend>
+<div class="grid grid-cols-1 lg:grid-cols-[1fr_1.5fr] gap-8">
+	<div class="flex flex-col gap-6">
+		<section>
+			<h2 class="text-editorial-label mb-3">Search</h2>
 			<SearchBar {placeholder} onSearch={handleSearch} />
-		</fieldset>
+		</section>
 
 		{#if $searchStore.loading}
-			<p class="loading-msg">Loading...</p>
+			<p class="text-sm text-[var(--color-muted)]">Loading...</p>
 		{:else if $searchStore.error}
-			<p class="error-msg-inline">{$searchStore.error}</p>
+			<p class="text-sm text-[var(--color-accent)]">{$searchStore.error}</p>
 		{:else if $searchStore.results.length > 0}
-			<section class="results-section">
-				<div class="section-header">Results</div>
-				<div class="search-results-scroll">
-					<div class="search-results">
+			<section>
+				<h3 class="text-editorial-label mb-3">Results</h3>
+				<div class="overflow-y-auto max-h-[60vh]">
+					<div class="flex flex-col gap-3">
 						{#each $searchStore.results as result (result.id)}
 							<ItemCard
 								item={result}
@@ -94,65 +94,81 @@
 				</div>
 			</section>
 		{:else}
-			<div class="list-creator-placeholder">
-				<p class="list-preview-empty">Search and click results to add them</p>
-			</div>
+			<p class="text-sm text-[var(--color-muted)] text-center py-8">Search and click results to add them</p>
 		{/if}
 	</div>
 
-	<div class="list-creator-right">
-	{#if $listStore.items.length > 0}
-		<DragDropProvider onDragEnd={handleDragEnd}>
-			<div class="list-preview">
-				<div class="list-preview-title">
+	<div class="flex flex-col gap-8">
+		{#if $listStore.items.length > 0}
+			<DragDropProvider onDragEnd={handleDragEnd}>
+				<div class="stepped-frame p-6">
+					<h2 class="font-display text-xl font-bold uppercase tracking-tight text-center py-6">
+						{$listStore.title.trim() || `Top 10 ${categoryLabels[category]}`}
+					</h2>
+					<div class="editorial-divider mb-6"></div>
+					<ol class="flex flex-col gap-2">
+						{#each $listStore.items as item, index (item.id)}
+							<ListItem {item} {index} onRemove={handleRemove} />
+						{/each}
+					</ol>
+					<div class="text-[0.6rem] text-[var(--color-muted)] text-center mt-6">
+						This list was created by {$listStore.creatorName.trim() || 'Anonymous'}
+					</div>
+				</div>
+			</DragDropProvider>
+		{:else}
+			<div class="stepped-frame p-6">
+				<h2 class="font-display text-xl font-bold uppercase tracking-tight text-center py-6">
 					{$listStore.title.trim() || `Top 10 ${categoryLabels[category]}`}
+				</h2>
+				<div class="editorial-divider mb-6"></div>
+				<p class="text-sm text-[var(--color-muted)] text-center py-8">Your list will appear here</p>
+			</div>
+		{/if}
+
+		<section>
+			<h2 class="text-editorial-label mb-4">Settings</h2>
+			<div class="flex flex-col gap-4">
+				<label class="flex flex-col gap-1">
+					<span class="text-editorial-label">List Title</span>
+					<input
+						type="text"
+						value={$listStore.title}
+						oninput={(e) => listStore.setTitle(e.currentTarget.value)}
+						maxlength="100"
+						required
+						class="bg-transparent border border-[var(--color-border)] rounded-none px-3 py-2 font-body text-sm focus:border-[var(--color-accent)] focus:outline-none transition-colors w-full"
+					/>
+				</label>
+
+				<label class="flex flex-col gap-1">
+					<span class="text-editorial-label">Your Name (optional)</span>
+					<input
+						type="text"
+						value={$listStore.creatorName}
+						oninput={(e) => listStore.setCreatorName(e.currentTarget.value)}
+						maxlength="50"
+						class="bg-transparent border border-[var(--color-border)] rounded-none px-3 py-2 font-body text-sm focus:border-[var(--color-accent)] focus:outline-none transition-colors w-full"
+					/>
+				</label>
+
+				<div class="flex gap-3 mt-2">
+					<button
+						type="button"
+						disabled
+						class="px-4 py-2 text-xs uppercase tracking-widest border border-[var(--color-border)] text-[var(--color-muted)] hover:border-[var(--color-accent)] hover:text-[var(--color-accent)] transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+					>
+						Export Image
+					</button>
+					<button
+						type="button"
+						disabled
+						class="px-4 py-2 text-xs uppercase tracking-widest border border-[var(--color-border)] text-[var(--color-muted)] hover:border-[var(--color-accent)] hover:text-[var(--color-accent)] transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+					>
+						Copy Link
+					</button>
 				</div>
-				<ol class="selections-list">
-					{#each $listStore.items as item, index (item.id)}
-						<ListItem {item} {index} onRemove={handleRemove} />
-					{/each}
-				</ol>
-				<div class="list-watermark">
-					This list was created by {$listStore.creatorName.trim() || 'Anonymous'}
-				</div>
 			</div>
-		</DragDropProvider>
-	{:else}
-		<div class="list-preview">
-			<div class="list-preview-title">
-				{$listStore.title.trim() || `Top 10 ${categoryLabels[category]}`}
-			</div>
-			<p class="list-preview-empty">Your list will appear here</p>
-		</div>
-	{/if}
-
-		<fieldset>
-			<legend>Settings</legend>
-			<label>
-				List Title
-				<input
-					type="text"
-					value={$listStore.title}
-					oninput={(e) => listStore.setTitle(e.currentTarget.value)}
-					maxlength="100"
-					required
-				/>
-			</label>
-
-			<label>
-				Your Name (optional)
-				<input
-					type="text"
-					value={$listStore.creatorName}
-					oninput={(e) => listStore.setCreatorName(e.currentTarget.value)}
-					maxlength="50"
-				/>
-			</label>
-
-			<div class="action-buttons">
-				<button type="button" disabled>Export Image</button>
-				<button type="button" disabled>Copy Link</button>
-			</div>
-		</fieldset>
+		</section>
 	</div>
 </div>
