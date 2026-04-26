@@ -4,11 +4,13 @@
 	let {
 		category,
 		href,
-		label
+		label,
+		image
 	}: {
 		category: Category;
 		href: string;
 		label: string;
+		image: string;
 	} = $props();
 
 	const descriptions: Record<Category, string> = {
@@ -19,9 +21,18 @@
 	};
 </script>
 
-<a {href} data-category={category} class="group block py-8 md:py-12 border-b border-[var(--color-border)] transition-colors hover:border-[var(--color-accent)]">
-	<h2 class="font-display text-2xl md:text-3xl font-bold uppercase tracking-tight mb-3 group-hover:text-[var(--color-accent)] transition-colors">
-		{label}
-	</h2>
-	<p class="text-editorial-label">{descriptions[category]}</p>
+<a
+	{href}
+	data-category={category}
+	class="group ticket-cut block bg-[var(--color-fg)] focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] focus-visible:ring-inset"
+>
+	<div class="overflow-hidden">
+		<img src={image} alt="" class="img-grayscale w-full aspect-[3/4] object-cover" />
+	</div>
+	<div class="p-4">
+		<h2 class="font-display text-2xl md:text-3xl font-bold uppercase tracking-tight group-hover:text-[var(--color-accent)] transition-colors">
+			{label}
+		</h2>
+		<p class="text-editorial-label">{descriptions[category]}</p>
+	</div>
 </a>

@@ -1,12 +1,16 @@
 <script lang="ts">
 	import { CategoryCard } from '$lib/components';
 	import type { Category } from '$lib/types';
+	import animeHero from '$lib/assets/anime-hero.webp';
+	import charHero from '$lib/assets/char-hero.webp';
+	import ranobeHero from '$lib/assets/ranobe-hero.webp';
+	import vnHero from '$lib/assets/vn-hero.webp';
 
-	const categories: { category: Category; label: string; href: string }[] = [
-		{ category: 'anime', label: 'Anime', href: '/anime' },
-		{ category: 'character', label: 'Character', href: '/char' },
-		{ category: 'light-novel', label: 'Light Novel', href: '/ranobe' },
-		{ category: 'visual-novel', label: 'Visual Novel', href: '/vn' }
+	const categories: { category: Category; label: string; href: string; image: string }[] = [
+		{ category: 'anime', label: 'Anime', href: '/anime', image: animeHero },
+		{ category: 'character', label: 'Character', href: '/char', image: charHero },
+		{ category: 'light-novel', label: 'Light Novel', href: '/ranobe', image: ranobeHero },
+		{ category: 'visual-novel', label: 'Visual Novel', href: '/vn', image: vnHero }
 	];
 </script>
 
@@ -16,7 +20,7 @@
 </div>
 
 <section class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
-	{#each categories as { category, label, href }}
-		<CategoryCard {category} {label} {href} />
+	{#each categories as { category, label, href, image }}
+		<CategoryCard {category} {label} {href} {image} />
 	{/each}
 </section>
