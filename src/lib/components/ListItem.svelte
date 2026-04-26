@@ -30,15 +30,33 @@
 	}
 </script>
 
-<li class="list-item" class:dragging={sortable.isDragging} data-rank={item.rank} {@attach sortable.attach}>
-	<span class="list-item-rank">{item.rank}</span>
-	<img src={fallbackSrc ?? imgSrc} alt={item.title} loading="lazy" width="60" onerror={handleError} />
-	<div class="list-item-info">
-		<h4>{item.title}</h4>
+<li
+	class="grid grid-cols-[60px_60px_1fr_auto] gap-4 items-center py-4 px-4 border-b border-[var(--color-border)] last:border-b-0 {sortable.isDragging ? 'opacity-50' : ''}"
+	data-rank={item.rank}
+	{@attach sortable.attach}
+>
+	<span class="font-display text-4xl font-bold text-[var(--color-muted)] text-center leading-none">{item.rank}</span>
+	<img
+		src={fallbackSrc ?? imgSrc}
+		alt={item.title}
+		loading="lazy"
+		width="60"
+		class="w-[60px] h-[80px] object-cover border border-[var(--color-border)]"
+		onerror={handleError}
+	/>
+	<div class="min-w-0">
+		<h4 class="font-body text-base font-medium truncate">{item.title}</h4>
 		{#if item.altTitle}
-			<p>{item.altTitle}</p>
+			<p class="font-body text-xs text-[var(--color-muted)] truncate">{item.altTitle}</p>
 		{/if}
-		<small>Source: {item.source}</small>
+		<p class="text-editorial-label mt-1">Source: {item.source}</p>
 	</div>
-	<button onclick={handleRemove} type="button" aria-label="Remove {item.title}">✕</button>
+	<button
+		onclick={handleRemove}
+		type="button"
+		aria-label="Remove {item.title}"
+		class="text-sm text-[var(--color-muted)] hover:text-[var(--color-accent)] transition-colors px-2"
+	>
+		✕
+	</button>
 </li>

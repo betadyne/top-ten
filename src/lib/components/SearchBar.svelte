@@ -21,13 +21,19 @@
 	}
 </script>
 
-<form class="search-form" onsubmit={handleSubmit}>
+<form class="flex gap-3" onsubmit={handleSubmit}>
 	<input
 		type="search"
 		value={query}
 		oninput={handleInput}
 		{placeholder}
 		aria-label="Search"
+		class="flex-1 bg-transparent border border-[var(--color-border)] rounded-none px-4 py-2 font-body text-sm placeholder:text-[var(--color-muted)] focus:border-[var(--color-accent)] focus:outline-none transition-colors"
 	/>
-	<button type="submit">Search</button>
+	<button
+		type="submit"
+		class="px-4 py-2 text-editorial-label hover:text-[var(--color-accent)] transition-colors border border-[var(--color-border)] hover:border-[var(--color-accent)]"
+	>
+		Search
+	</button>
 </form>
