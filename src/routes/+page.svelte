@@ -10,10 +10,12 @@
 	];
 </script>
 
-<h1 class="home-title">Top 10 List Maker</h1>
-<p class="home-subtitle">Create and share your Top 10 lists for Anime, Characters, Light Novels, and Visual Novels.</p>
+<div class="text-center mb-16 md:mb-24">
+	<p class="text-editorial-label mb-4">Create and share your personal rankings</p>
+	<div class="editorial-divider max-w-xs mx-auto mb-16"></div>
+</div>
 
-<section class="category-grid">
+<section class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
 	{#each categories as { category, label, href }}
 		<CategoryCard {category} {label} {href} />
 	{/each}

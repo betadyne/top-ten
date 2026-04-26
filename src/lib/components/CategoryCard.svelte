@@ -19,7 +19,9 @@
 	};
 </script>
 
-<a {href} data-category={category} class="category-card">
-	<h2>{label}</h2>
-	<p>{descriptions[category]}</p>
+<a {href} data-category={category} class="group block py-8 md:py-12 border-b border-[var(--color-border)] transition-colors hover:border-[var(--color-accent)]">
+	<h2 class="font-display text-2xl md:text-3xl font-bold uppercase tracking-tight mb-3 group-hover:text-[var(--color-accent)] transition-colors">
+		{label}
+	</h2>
+	<p class="text-editorial-label">{descriptions[category]}</p>
 </a>
