@@ -30,7 +30,7 @@
     {@render children()}
 </main>
 
-<footer class="w-full py-8 md:py-12 border-t border-[var(--color-border)]">
+<footer class="w-full py-8 md:py-12">
     <div class="max-w-5xl mx-auto px-6 text-center">
         <p class="editorial-brackets text-editorial-label">
             rank.shiroha.my.id
