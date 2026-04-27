@@ -34,7 +34,7 @@
 		<!-- Left: Text content (~45%) -->
 		<div class="flex flex-col justify-between p-4 md:p-5 w-[45%] min-h-0">
 			<div>
-				<span class="font-mono text-3xl md:text-4xl font-bold leading-none text-[var(--color-fg)]">
+				<span class="font-display text-3xl md:text-4xl font-bold leading-none text-[var(--color-fg)]">
 					{number}
 				</span>
 				<h2 class="font-display text-lg md:text-xl font-bold uppercase tracking-tight mt-1 text-[var(--color-fg)]">

@@ -14,7 +14,7 @@
     <header class="w-full py-8 md:py-12">
         <div class="max-w-5xl mx-auto px-6">
             <h1
-                class="font-display text-2xl md:text-3xl font-bold uppercase tracking-tighter"
+                class="font-display text-2xl md:text-3xl font-bold uppercase tracking-tight"
             >
                 <a
                     href="/"

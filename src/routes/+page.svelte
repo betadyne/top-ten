@@ -15,7 +15,7 @@
 </script>
 
 <div class="mb-6 md:mb-8">
-	<h1 class="font-display text-4xl md:text-5xl font-bold uppercase tracking-tighter leading-none">
+	<h1 class="font-display text-4xl md:text-5xl font-bold uppercase tracking-tight leading-none">
 		Top 10<br />List Maker
 	</h1>
 	<p class="text-editorial-label mt-3">Create and share your personal rankings</p>
