@@ -5,13 +5,17 @@
 		category,
 		href,
 		label,
-		image
+		image,
+		index
 	}: {
 		category: Category;
 		href: string;
 		label: string;
 		image: string;
+		index: number;
 	} = $props();
+
+	const number = $derived(String(index + 1).padStart(2, '0'));
 
 	const descriptions: Record<Category, string> = {
 		anime: 'Create your Top 10 Anime list',
@@ -24,15 +28,32 @@
 <a
 	{href}
 	data-category={category}
-	class="group ticket-cut block bg-[var(--color-fg)] focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] focus-visible:ring-inset"
+	class="group ticket-cut block hover:text-[var(--color-fg)] focus-visible:outline-2 focus-visible:outline-[var(--color-fg)] focus-visible:outline-offset-4"
 >
-	<div class="overflow-hidden">
-		<img src={image} alt="" class="img-grayscale w-full aspect-[3/4] object-cover" />
-	</div>
-	<div class="p-4">
-		<h2 class="font-display text-2xl md:text-3xl font-bold uppercase tracking-tight group-hover:text-[var(--color-accent)] transition-colors">
-			{label}
-		</h2>
-		<p class="text-editorial-label">{descriptions[category]}</p>
+	<div class="flex border border-[var(--color-fg)] bg-[var(--color-bg)]">
+		<!-- Left: Text content (~45%) -->
+		<div class="flex flex-col justify-between p-4 md:p-5 w-[45%] min-h-0">
+			<div>
+				<span class="font-mono text-3xl md:text-4xl font-bold leading-none text-[var(--color-fg)]">
+					{number}
+				</span>
+				<h2 class="font-display text-lg md:text-xl font-bold uppercase tracking-tight mt-1 text-[var(--color-fg)]">
+					{label}
+				</h2>
+				<p class="text-editorial-label mt-1">{descriptions[category]}</p>
+			</div>
+			<div class="flex items-center gap-2 mt-3">
+				<span class="block flex-1 h-px bg-[var(--color-border)]"></span>
+				<span class="font-mono text-xs text-[var(--color-muted)]">&#x203A;</span>
+			</div>
+		</div>
+		<!-- Right: Image (~55%) -->
+		<div class="relative w-[55%] corner-brackets">
+			<img
+				src={image}
+				alt=""
+				class="img-grayscale w-full h-full object-cover aspect-[4/3]"
+			/>
+		</div>
 	</div>
 </a>

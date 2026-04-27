@@ -14,13 +14,15 @@
 	];
 </script>
 
-<div class="text-center mb-16 md:mb-24">
-	<p class="text-editorial-label mb-4">Create and share your personal rankings</p>
-	<div class="editorial-divider max-w-xs mx-auto mb-16"></div>
+<div class="mb-6 md:mb-8">
+	<h1 class="font-display text-4xl md:text-5xl font-bold uppercase tracking-tighter leading-none">
+		Top 10<br />List Maker
+	</h1>
+	<p class="text-editorial-label mt-3">Create and share your personal rankings</p>
 </div>
 
-<section class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
-	{#each categories as { category, label, href, image }}
-		<CategoryCard {category} {label} {href} {image} />
+<section class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+	{#each categories as { category, label, href, image }, i}
+		<CategoryCard {category} {label} {href} {image} index={i} />
 	{/each}
 </section>

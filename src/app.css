@@ -179,4 +179,32 @@
       transition: none;
     }
   }
+
+  .corner-brackets {
+    position: relative;
+  }
+
+  .corner-brackets::before,
+  .corner-brackets::after {
+    content: '';
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  .corner-brackets::before {
+    top: 8px;
+    left: 8px;
+    border-top: 1.5px solid rgba(255,255,255,0.6);
+    border-left: 1.5px solid rgba(255,255,255,0.6);
+  }
+
+  .corner-brackets::after {
+    bottom: 8px;
+    right: 8px;
+    border-bottom: 1.5px solid rgba(255,255,255,0.6);
+    border-right: 1.5px solid rgba(255,255,255,0.6);
+  }
 }
