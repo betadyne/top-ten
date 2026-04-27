@@ -19,7 +19,7 @@
                 <a
                     href="/"
                     class="hover:text-[var(--color-accent)] transition-colors"
-                    >Top 10 List Maker</a
+                    >Home</a
                 >
             </h1>
         </div>
