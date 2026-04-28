@@ -68,7 +68,8 @@ export const GET: RequestHandler = async ({ url, platform }) => {
 				originalImageUrl: image,
 				metadata: {
 					releaseDate: item.released,
-					publisher: item.developers?.[0]?.name
+					publisher: item.developers?.[0]?.name,
+					developer: item.developers?.[0]?.name
 				}
 			};
 		});

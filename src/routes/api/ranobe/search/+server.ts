@@ -75,6 +75,46 @@ export const GET: RequestHandler = async ({ url, platform }) => {
 				}
 			};
 		});
+
+		// Enrich with author data via individual book lookups
+		const authorLookups = results.map(async (result) => {
+			const bookId = result.id.replace('ranobe_', '');
+			try {
+				const controller = new AbortController();
+				const timeoutId = setTimeout(() => controller.abort(), 3000);
+				const res = await fetch(`${RANOBEDB_ENDPOINT}/book/${bookId}`, {
+					headers: { 'Accept': 'application/json' },
+					signal: controller.signal
+				});
+				clearTimeout(timeoutId);
+				if (!res.ok) return result;
+				const bookData = await res.json() as {
+					editions?: Array<{
+						staff?: Array<{
+							role_type?: string;
+							romaji?: string | null;
+							name?: string;
+						}>;
+					}>;
+				};
+				const author = bookData.editions
+					?.flatMap(e => e.staff ?? [])
+					.find(s => s.role_type === 'author');
+				if (author) {
+					result.metadata = {
+						...result.metadata,
+						author: author.romaji ?? author.name
+					};
+				}
+				return result;
+			} catch {
+				return result; // Silently skip failed lookups
+			}
+		});
+		const enrichedResults = await Promise.allSettled(authorLookups);
+		results = enrichedResults.map((r, i) =>
+			r.status === 'fulfilled' ? r.value : results[i]
+		);
 	} catch (e) {
 		console.error('[ranobe] fetch error:', e instanceof Error ? e.message : String(e));
 		error(502, { message: 'Failed to connect to RanobeDB API' });

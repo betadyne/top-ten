@@ -23,6 +23,7 @@ const SEARCH_ANIME_QUERY = `
         seasonYear
         format
         episodes
+        studios(isMain: true) { edges { node { name } } }
       }
     }
   }
@@ -69,6 +70,7 @@ export const GET: RequestHandler = async ({ url, platform }) => {
 						seasonYear?: number;
 						format?: string;
 						episodes?: number;
+						studios?: { edges?: Array<{ node?: { name?: string } }> };
 					}>;
 				};
 			};
@@ -95,7 +97,8 @@ export const GET: RequestHandler = async ({ url, platform }) => {
 					episodes: item.episodes,
 					season: item.season,
 					year: item.seasonYear,
-					format: item.format
+					format: item.format,
+					studio: item.studios?.edges?.[0]?.node?.name
 				}
 			};
 		});

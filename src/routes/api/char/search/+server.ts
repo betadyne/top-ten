@@ -20,6 +20,13 @@ const SEARCH_CHARACTER_QUERY = `
         id
         name { full native }
         image { medium large }
+        media(perPage: 1) {
+          edges {
+            voiceActors(language: JAPANESE) {
+              name { full }
+            }
+          }
+        }
       }
     }
   }
@@ -45,6 +52,7 @@ const data = await response.json() as {
 						id: number;
 						name: { full?: string; native?: string };
 						image?: { medium?: string; large?: string };
+						media?: { edges?: Array<{ voiceActors?: Array<{ name?: { full?: string } }> }> };
 					}>;
 				};
 			};
@@ -66,7 +74,9 @@ const data = await response.json() as {
 				imageUrl: weservUrl(image, 400),
 				thumbnailUrl: weservUrl(image, 150),
 				originalImageUrl: image,
-				metadata: {}
+				metadata: {
+					voiceActor: item.media?.edges?.[0]?.voiceActors?.[0]?.name?.full
+				}
 			};
 		});
 	} catch (e) {
