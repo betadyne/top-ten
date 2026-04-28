@@ -40,9 +40,7 @@
     >
         10-Best
     </h1>
-    <p class="text-editorial-label mt-3">
-        Curate your peak fiction. Trash the rest.
-    </p>
+    <p class="text-editorial-label mt-3">Create. Rank. Share.</p>
 </div>
 
 <section class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">

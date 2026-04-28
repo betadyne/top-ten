@@ -18,10 +18,10 @@
     const number = $derived(String(index + 1).padStart(2, "0"));
 
     const descriptions: Record<Category, string> = {
-        anime: "Separate peak fiction from seasonal trash",
-        character: "Best girl? Best boy? Best... thing?",
-        "light-novel": "The real lore is in the LN",
-        "visual-novel": "Rate your 50 hours of enter-mashing dedication",
+        anime: "The series that defined your taste",
+        character: "Best girl? Best boy?",
+        "light-novel": "Source material worthy of its own spotlight",
+        "visual-novel": "Interactive narratives that transcended the medium",
     };
 </script>
 
@@ -30,7 +30,7 @@
     data-category={category}
     class="group ticket-cut block hover:text-[var(--color-fg)] focus-visible:outline-2 focus-visible:outline-[var(--color-fg)] focus-visible:outline-offset-4"
 >
-    <div class="flex border border-[var(--color-fg)] bg-[var(--color-bg)]">
+    <div class="flex border-2 border-[var(--color-fg)] bg-[var(--color-bg)]">
         <!-- Left: Text content (~45%) -->
         <div class="flex flex-col justify-between p-4 md:p-5 w-[45%] min-h-0">
             <div>
