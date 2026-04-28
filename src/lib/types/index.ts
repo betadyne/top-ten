@@ -18,9 +18,13 @@ export interface ListItem {
 		year?: number;
 		format?: string;
 		sourceName?: string;
-		releaseDate?: string;
+releaseDate?: string;
 		publisher?: string;
 		status?: string;
+		studio?: string;
+		developer?: string;
+		voiceActor?: string;
+		author?: string;
 	};
 }
 
@@ -52,5 +56,9 @@ export interface SearchResult {
 		releaseDate?: string;
 		publisher?: string;
 		status?: string;
+		studio?: string;
+		developer?: string;
+		voiceActor?: string;
+		author?: string;
 	};
 }
