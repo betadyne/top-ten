@@ -4,7 +4,7 @@ node_modules
 .output
 .vercel
 .netlify
-.wrangler
+.wrangler/
 /.svelte-kit
 /build
 
@@ -17,6 +17,16 @@ Thumbs.db
 .env.*
 !.env.example
 !.env.test
+
+# Editor
+.vscode/
+
+# Tools / Temp
+.sisyphus/
+.playwright-mcp/
+
+# Generated
+worker-configuration.d.ts
 
 # Vite
 vite.config.js.timestamp-*

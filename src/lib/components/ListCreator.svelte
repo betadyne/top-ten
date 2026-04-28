@@ -89,15 +89,15 @@
                 <div class="overflow-y-auto max-h-[60vh]">
                     <div class="flex flex-col gap-3">
                         {#each $searchStore.results as result (result.id)}
-<ItemCard
-								item={result}
-								onAdd={handleAdd}
-								disabled={$listStore.items.length >= 10 ||
-									$listStore.items.some(
-										(i) => i.id === result.id,
-									)}
-								{category}
-							/>
+                            <ItemCard
+                                item={result}
+                                onAdd={handleAdd}
+                                disabled={$listStore.items.length >= 10 ||
+                                    $listStore.items.some(
+                                        (i) => i.id === result.id,
+                                    )}
+                                {category}
+                            />
                         {/each}
                     </div>
                 </div>
@@ -160,7 +160,7 @@
                             listStore.setTitle(e.currentTarget.value)}
                         maxlength="100"
                         required
-                        class="bg-transparent border border-[var(--color-border)] rounded-none px-3 py-2 font-body text-sm focus:border-[var(--color-accent)] focus:outline-none transition-colors w-full"
+                        class="bg-transparent border-2 border-[var(--color-border)] rounded-none px-3 py-2 font-body text-sm focus:border-[var(--color-accent)] focus:outline-none transition-colors w-full"
                     />
                 </label>
 
@@ -174,7 +174,7 @@
                         oninput={(e) =>
                             listStore.setCreatorName(e.currentTarget.value)}
                         maxlength="50"
-                        class="bg-transparent border border-[var(--color-border)] rounded-none px-3 py-2 font-body text-sm focus:border-[var(--color-accent)] focus:outline-none transition-colors w-full"
+                        class="bg-transparent border-2 border-[var(--color-border)] rounded-none px-3 py-2 font-body text-sm focus:border-[var(--color-accent)] focus:outline-none transition-colors w-full"
                     />
                 </label>
 
@@ -182,14 +182,14 @@
                     <button
                         type="button"
                         disabled
-                        class="px-4 py-2 text-xs uppercase tracking-widest border border-[var(--color-border)] text-[var(--color-muted)] hover:border-[var(--color-accent)] hover:text-[var(--color-accent)] transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+                        class="px-4 py-2 text-xs uppercase tracking-widest border-2 border-[var(--color-border)] text-[var(--color-muted)] hover:border-[var(--color-accent)] hover:text-[var(--color-accent)] transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
                     >
                         Export Image
                     </button>
                     <button
                         type="button"
                         disabled
-                        class="px-4 py-2 text-xs uppercase tracking-widest border border-[var(--color-border)] text-[var(--color-muted)] hover:border-[var(--color-accent)] hover:text-[var(--color-accent)] transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+                        class="px-4 py-2 text-xs uppercase tracking-widest border-2 border-[var(--color-border)] text-[var(--color-muted)] hover:border-[var(--color-accent)] hover:text-[var(--color-accent)] transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
                     >
                         Copy Link
                     </button>
