@@ -46,9 +46,6 @@
 	/>
 	<div class="min-w-0">
 		<h4 class="font-body text-base font-medium truncate">{item.title}</h4>
-		{#if item.altTitle}
-			<p class="font-body text-xs text-[var(--color-muted)] truncate">{item.altTitle}</p>
-		{/if}
 		<p class="text-editorial-label mt-1">Source: {item.source}</p>
 	</div>
 	<button

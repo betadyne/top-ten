@@ -70,7 +70,7 @@
     }
 </script>
 
-<div class="grid grid-cols-1 lg:grid-cols-[1fr_1.5fr] gap-8">
+<div class="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_1.5fr] gap-8">
     <div class="flex flex-col gap-6">
         <section>
             <h2 class="text-editorial-label mb-3">Search</h2>

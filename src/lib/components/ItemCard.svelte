@@ -39,9 +39,6 @@
 		onerror={handleError}
 	/>
 	<div class="min-w-0 flex-1">
-		<h3 class="font-body text-sm font-medium truncate">{item.title}</h3>
-		{#if item.altTitle}
-			<p class="font-body text-xs text-[var(--color-muted)] truncate">{item.altTitle}</p>
-		{/if}
+		<h3 class="font-body text-sm font-medium line-clamp-2 break-words">{item.title}</h3>
 	</div>
 </div>
