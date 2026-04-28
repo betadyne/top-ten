@@ -89,14 +89,15 @@
                 <div class="overflow-y-auto max-h-[60vh]">
                     <div class="flex flex-col gap-3">
                         {#each $searchStore.results as result (result.id)}
-                            <ItemCard
-                                item={result}
-                                onAdd={handleAdd}
-                                disabled={$listStore.items.length >= 10 ||
-                                    $listStore.items.some(
-                                        (i) => i.id === result.id,
-                                    )}
-                            />
+<ItemCard
+								item={result}
+								onAdd={handleAdd}
+								disabled={$listStore.items.length >= 10 ||
+									$listStore.items.some(
+										(i) => i.id === result.id,
+									)}
+								{category}
+							/>
                         {/each}
                     </div>
                 </div>

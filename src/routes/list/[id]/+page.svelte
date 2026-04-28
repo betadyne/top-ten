@@ -74,7 +74,15 @@
 					/>
 					<div class="min-w-0">
 						<h3 class="font-body text-lg font-medium truncate">{item.title}</h3>
-						<p class="text-editorial-label mt-2">Source: {item.source}</p>
+						{#if list.category === 'anime' && item.metadata?.studio}
+							<p class="text-editorial-label mt-2">{item.metadata.studio}</p>
+						{:else if list.category === 'visual-novel' && (item.metadata?.developer ?? item.metadata?.publisher)}
+							<p class="text-editorial-label mt-2">{item.metadata.developer ?? item.metadata.publisher}</p>
+						{:else if list.category === 'character' && item.metadata?.voiceActor}
+							<p class="text-editorial-label mt-2">CV: {item.metadata.voiceActor}</p>
+						{:else if list.category === 'light-novel' && item.metadata?.author}
+							<p class="text-editorial-label mt-2">{item.metadata.author}</p>
+						{/if}
 					</div>
 				</li>
 			{/each}

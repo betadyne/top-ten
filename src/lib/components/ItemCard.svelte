@@ -1,14 +1,16 @@
 <script lang="ts">
-	import type { SearchResult } from '$lib/types';
+	import type { SearchResult, Category } from '$lib/types';
 
 	let {
 		item,
 		onAdd,
-		disabled = false
+		disabled = false,
+		category
 	}: {
 		item: SearchResult;
 		onAdd: (item: SearchResult) => void;
 		disabled?: boolean;
+		category: Category;
 	} = $props();
 	let imgSrc = $derived(item.thumbnailUrl);
 	let fallbackSrc = $state<string | null>(null);
@@ -40,5 +42,14 @@
 	/>
 	<div class="min-w-0 flex-1">
 		<h3 class="font-body text-sm font-medium line-clamp-2 break-words">{item.title}</h3>
+		{#if category === 'anime' && item.metadata?.studio}
+			<p class="font-body text-xs text-[var(--color-muted)]">{item.metadata.studio}</p>
+		{:else if category === 'visual-novel' && (item.metadata?.developer ?? item.metadata?.publisher)}
+			<p class="font-body text-xs text-[var(--color-muted)]">{item.metadata.developer ?? item.metadata.publisher}</p>
+		{:else if category === 'character' && item.metadata?.voiceActor}
+			<p class="font-body text-xs text-[var(--color-muted)]">CV: {item.metadata.voiceActor}</p>
+		{:else if category === 'light-novel' && item.metadata?.author}
+			<p class="font-body text-xs text-[var(--color-muted)]">{item.metadata.author}</p>
+		{/if}
 	</div>
 </div>

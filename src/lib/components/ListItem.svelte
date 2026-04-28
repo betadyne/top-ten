@@ -46,7 +46,15 @@
 	/>
 	<div class="min-w-0">
 		<h4 class="font-body text-base font-medium truncate">{item.title}</h4>
-		<p class="text-editorial-label mt-1">Source: {item.source}</p>
+		{#if item.category === 'anime' && item.metadata?.studio}
+		<p class="text-editorial-label mt-1">{item.metadata.studio}</p>
+	{:else if item.category === 'visual-novel' && (item.metadata?.developer ?? item.metadata?.publisher)}
+		<p class="text-editorial-label mt-1">{item.metadata.developer ?? item.metadata.publisher}</p>
+	{:else if item.category === 'character' && item.metadata?.voiceActor}
+		<p class="text-editorial-label mt-1">CV: {item.metadata.voiceActor}</p>
+	{:else if item.category === 'light-novel' && item.metadata?.author}
+		<p class="text-editorial-label mt-1">{item.metadata.author}</p>
+	{/if}
 	</div>
 	<button
 		onclick={handleRemove}
