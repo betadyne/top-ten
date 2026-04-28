@@ -88,7 +88,8 @@ export const GET: RequestHandler = async ({ url, platform }) => {
 				});
 				clearTimeout(timeoutId);
 				if (!res.ok) return result;
-				const bookData = await res.json() as {
+			const bookData = await res.json() as {
+				book?: {
 					editions?: Array<{
 						staff?: Array<{
 							role_type?: string;
@@ -97,7 +98,8 @@ export const GET: RequestHandler = async ({ url, platform }) => {
 						}>;
 					}>;
 				};
-				const author = bookData.editions
+			};
+				const author = bookData.book?.editions
 					?.flatMap(e => e.staff ?? [])
 					.find(s => s.role_type === 'author');
 				if (author) {
